@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+/* ==============================
+   Fridge Rescue A 版測試樣式
+   未來與組員 B 的正式 CSS 整合
+   ============================== */
+
+/* 基本網頁樣式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, "微軟正黑體", sans-serif;
+    background-color: #f5f7f5;
+    color: #333333;
+}
+
+/* 導覽列 */
+.navbar-brand {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* 網站標題區 */
+header {
+    background-color: #e8f3e9;
+}
+
+header h1 {
+    font-size: 42px;
+    font-weight: bold;
+    color: #246b45;
+}
+
+header p {
+    color: #666666;
+}
+
+/* 主要內容區 */
+main {
+    margin-top: 30px;
+}
+
+section, aside {
+    scroll-margin-top: 20px;
+}
+
+/* 卡片 */
+.card {
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.card h2 {
+    font-weight: bold;
+}
+
+/* 食譜卡片 */
+.recipe-card {
+    height: 100%;
+}
+
+.recipe-card h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.recipe-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* 匹配度進度條 */
+.progress {
+    height: 12px;
+    background-color: #e9ecef;
+}
+
+/* 已具備及缺少食材 */
+.owned-ingredients {
+    color: #198754;
+}
+
+.missing-ingredients {
+    color: #dc3545;
+}
+
+/* 模擬冰箱庫存 */
+.fridge-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #dddddd;
+}
+
+/* 智慧補貨項目 */
+.restock-item {
+    padding: 15px;
+    margin-bottom: 12px;
+    background-color: #f0f7f1;
+    border-radius: 8px;
+}
+
+/* 採買清單 */
+.shopping-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #dddddd;
+}
+
+/* 已購買食材 */
+.purchased {
+    text-decoration: line-through;
+    color: #999999;
+}
+
+/* 按鈕 */
+button {
+    cursor: pointer;
+}
+
+/* 網站頁尾 */
+footer p {
+    margin-bottom: 5px;
+}
+
+/* 手機版基本樣式 */
+@media screen and (max-width: 768px) {
+
+    header h1 {
+        font-size: 32px;
+    }
+
+    header h2 {
+        font-size: 18px;
+    }
+
+    main {
+        margin-top: 15px;
+    }
+
+    .recipe-image {
+        height: 160px;
+    }
+
+    .shopping-item {
+        flex-wrap: wrap;
+    }
+}

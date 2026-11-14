@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fridge Rescue 智慧冰箱剩食推薦與保鮮管家">
+
+    <title>Fridge Rescue｜智慧冰箱剩食推薦與保鮮管家</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 自訂 CSS -->
+    <link rel="stylesheet" href="mystyle.css">
+</head>
+
+<body>
+
+    <!-- 頂端導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="#">Fridge Rescue</a>
+
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#fridgeSection">我的冰箱</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#recipeSection">食譜推薦</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#restockSection">智慧補貨</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#shoppingSection">採買清單</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 網站標題 -->
+    <header class="text-center py-5">
+        <div class="container">
+            <h1>Fridge Rescue</h1>
+            <h2 class="h4">智慧冰箱剩食推薦與保鮮管家</h2>
+            <p>不用先想吃什麼，先看看冰箱裡有什麼。</p>
+
+            <div>
+                <span class="badge bg-success">
+                    庫存食材：<span id="inventoryCount">0</span>
+                </span>
+
+                <span class="badge bg-warning text-dark">
+                    即期食材：<span id="expiringCount">0</span>
+                </span>
+
+                <span class="badge bg-primary">
+                    零採買料理：<span id="availableRecipeCount">0</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 網站主要內容 -->
+    <main class="container pb-5">
+
+        <div id="appMessage" role="status" aria-live="polite"></div>
+
+        <div class="row g-4">
+
+            <!-- 模擬冰箱區：未來由 B 的正式模組取代 -->
+            <aside class="col-lg-4" id="fridgeSection">
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h2 class="h4">我的冰箱</h2>
+
+                        <div id="mockFridgePanel">
+
+                            <div class="alert alert-secondary">
+                                A 版開發測試專用，非正式冰箱模組。
+                            </div>
+
+                            <form id="mockFridgeForm">
+
+                                <div class="mb-3">
+                                    <label for="ingredientSelect" class="form-label">
+                                        選擇食材
+                                    </label>
+
+                                    <select id="ingredientSelect"
+                                        class="form-select" required>
+                                        <option value="">請選擇食材</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="expiryDate" class="form-label">
+                                        到期日期
+                                    </label>
+
+                                    <input type="date" id="expiryDate"
+                                        class="form-control">
+
+                                    <small class="text-muted">
+                                        未設定日期也可以參與配對。
+                                    </small>
+                                </div>
+
+                                <button type="submit"
+                                    class="btn btn-success w-100">
+                                    新增測試食材
+                                </button>
+
+                            </form>
+
+                            <hr>
+
+                            <h3 class="h5">目前庫存</h3>
+
+                            <div id="mockFridgeList">
+                                <p class="text-muted">目前沒有食材。</p>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+
+                                <button type="button" id="loadDemoBtn"
+                                    class="btn btn-outline-success btn-sm">
+                                    載入測試資料
+                                </button>
+
+                                <button type="button" id="clearFridgeBtn"
+                                    class="btn btn-outline-danger btn-sm">
+                                    清空測試庫存
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <small class="text-muted d-block mt-3">
+                            保存期限燈號僅反映輸入日期，不代表食品安全鑑定。
+                        </small>
+
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- 智慧食譜推薦 -->
+            <section class="col-lg-8" id="recipeSection">
+
+                <h2 class="h4 mb-3">智慧食譜推薦</h2>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                        <!-- 篩選條件 -->
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label for="timeFilter" class="form-label">
+                                    料理時間
+                                </label>
+
+                                <select id="timeFilter" class="form-select">
+                                    <option value="all">不限時間</option>
+                                    <option value="10">10 分鐘以內</option>
+                                    <option value="20">20 分鐘以內</option>
+                                    <option value="30">30 分鐘以內</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="difficultyFilter" class="form-label">
+                                    料理難度
+                                </label>
+
+                                <select id="difficultyFilter" class="form-select">
+                                    <option value="all">不限難度</option>
+                                    <option value="簡單">簡單</option>
+                                    <option value="中等">中等</option>
+                                    <option value="困難">困難</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="dietFilter" class="form-label">
+                                    飲食偏好
+                                </label>
+
+                                <select id="dietFilter" class="form-select">
+                                    <option value="all">不限偏好</option>
+                                    <option value="蛋奶素">蛋奶素</option>
+                                    <option value="無肉">無肉</option>
+                                    <option value="無乳製品">無乳製品</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- 零採買模式 -->
+                        <div class="form-check form-switch mt-3">
+
+                            <input type="checkbox"
+                                class="form-check-input"
+                                id="zeroShopping">
+
+                            <label class="form-check-label"
+                                for="zeroShopping">
+                                零採買模式（只顯示食材全齊的料理）
+                            </label>
+
+                        </div>
+
+                        <button type="button" id="resetFiltersBtn"
+                            class="btn btn-outline-secondary btn-sm mt-3">
+                            重設篩選
+                        </button>
+
+                    </div>
+                </div>
+
+                <p class="text-muted">
+                    符合條件的料理：<span id="recipeCount">0</span> 道
+                </p>
+
+                <!-- JavaScript 動態產生食譜卡片 -->
+                <div id="recipeList" class="row g-3"></div>
+
+            </section>
+
+        </div>
+
+        <!-- 智慧補貨及採買清單 -->
+        <div class="row g-4 mt-4">
+
+            <!-- 智慧補貨 -->
+            <section class="col-lg-6" id="restockSection">
+
+                <div class="card h-100">
+                    <div class="card-body">
+
+                        <h2 class="h4">智慧補貨推薦</h2>
+
+                        <p class="text-muted">
+                            只多買一樣食材，就能解鎖更多料理。
+                        </p>
+
+                        <!-- JavaScript 動態產生推薦結果 -->
+                        <div id="restockList"></div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- 採買清單 -->
+            <section class="col-lg-6" id="shoppingSection">
+
+                <div class="card h-100">
+                    <div class="card-body">
+
+                        <h2 class="h4">我的採買清單</h2>
+
+                        <p class="text-muted">
+                            已購買 <span id="purchasedCount">0</span> /
+                            <span id="shoppingCount">0</span> 項
+                        </p>
+
+                        <!-- JavaScript 動態產生採買清單 -->
+                        <div id="shoppingList"></div>
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+
+                            <button type="button" id="copyShoppingBtn"
+                                class="btn btn-success">
+                                複製採買清單
+                            </button>
+
+                            <button type="button" id="clearShoppingBtn"
+                                class="btn btn-outline-danger">
+                                清空清單
+                            </button>
+
+                        </div>
+
+                        <!-- 複製功能的備援文字區 -->
+                        <div id="copyFallback" class="mt-3" hidden>
+
+                            <label for="shoppingCopyText" class="form-label">
+                                請手動複製以下文字：
+                            </label>
+
+                            <textarea id="shoppingCopyText"
+                                class="form-control"
+                                rows="5" readonly></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Bootstrap Modal：食譜詳情 -->
+    <div class="modal fade" id="recipeModal" tabindex="-1"
+        aria-labelledby="recipeModalTitle" aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h2 class="modal-title h5" id="recipeModalTitle">
+                        食譜詳情
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="關閉"></button>
+
+                </div>
+
+                <div class="modal-body" id="recipeModalBody"></div>
+
+                <div class="modal-footer">
+
+                    <button type="button" id="modalAddShoppingBtn"
+                        class="btn btn-success">
+                        加入採買清單
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        關閉
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 網站頁尾 -->
+    <footer class="bg-dark text-white text-center py-4">
+
+        <p>Fridge Rescue｜網站企劃課程專案</p>
+
+        <small>
+            A 版核心功能測試・食譜及介面尚未正式整合
+        </small>
+
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 食材主檔 -->
+    <script src="ingredients.js"></script>
+
+    <!-- 測試食譜 -->
+    <script src="recipes.js"></script>
+
+    <!-- 主要功能程式 -->
+    <script src="myScript.js"></script>
+
+</body>
+
+</html>
