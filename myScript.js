@@ -1,10 +1,13 @@
-// Fridge Rescue A 版：推薦、篩選、補貨、採買清單
+
+// Fridge Rescue A 版 V1.1：推薦、篩選、補貨、採買清單、料理抽籤
 // 正式冰箱接入方式：FridgeRescue.setInventory(轉換後的庫存陣列)
 (function () {
     "use strict";
+
     const FRIDGE_KEY = "fridgeRescue_A_mock_v1";
     const SHOP_KEY = "fridgeRescue_A_shopping_v1";
     const $ = function (id) { return document.getElementById(id); };
+
     let storageError = false;
     let fridgeItems = readStorage(FRIDGE_KEY);
     let shoppingList = readStorage(SHOP_KEY);
@@ -14,7 +17,9 @@
 
     // 1. 共用工具：食材查詢、文字安全顯示、本機儲存
     function ingredientById(id) {
-        return ingredients.find(function (item) { return item.ingredient_id === id; });
+        return ingredients.find(function (item) {
+            return item.ingredient_id === id;
+        });
     }
 
     function ingredientName(id) {
@@ -28,7 +33,13 @@
 
     function escapeHTML(value) {
         return String(value == null ? "" : value).replace(/[&<>"']/g, function (c) {
-            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[c];
         });
     }
 
@@ -36,12 +47,20 @@
         try {
             const data = JSON.parse(localStorage.getItem(key));
             return Array.isArray(data) ? data : [];
-        } catch (error) { storageError = true; return []; }
+        } catch (error) {
+            storageError = true;
+            return [];
+        }
     }
 
     function saveStorage(key, data) {
-        try { localStorage.setItem(key, JSON.stringify(data)); return true; }
-        catch (error) { storageError = true; return false; }
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+            return true;
+        } catch (error) {
+            storageError = true;
+            return false;
+        }
     }
 
     function message(text, type = "success") {
@@ -49,38 +68,97 @@
             text += "（本機儲存曾發生錯誤，請確認瀏覽器設定。）";
             type = "warning";
         }
-        $("appMessage").innerHTML = `<div class="alert alert-${type}">${escapeHTML(text)}</div>`;
+
+        $("appMessage").innerHTML =
+            `<div class="alert alert-${type}">${escapeHTML(text)}</div>`;
     }
 
     // 2. 日期只比較本地日曆日期，避免時區及日光節約時間誤差
     function localDate(date) {
-        return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+        return date.getFullYear() + "-" +
+            String(date.getMonth() + 1).padStart(2, "0") + "-" +
+            String(date.getDate()).padStart(2, "0");
     }
 
     function dayNumber(value) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return NaN;
+
         const parts = value.split("-").map(Number);
         const date = new Date(0);
+
         date.setUTCFullYear(parts[0], parts[1] - 1, parts[2]);
-        if (date.getUTCFullYear() !== parts[0] || date.getUTCMonth() + 1 !== parts[1] || date.getUTCDate() !== parts[2]) return NaN;
+
+        if (
+            date.getUTCFullYear() !== parts[0] ||
+            date.getUTCMonth() + 1 !== parts[1] ||
+            date.getUTCDate() !== parts[2]
+        ) return NaN;
+
         return date.getTime() / 86400000;
     }
 
     function expiryStatus(expiryDate, today = localDate(new Date())) {
-        if (!expiryDate) return { days: null, color: "secondary", text: "未設定期限", usable: true, urgent: false };
+
+        if (!expiryDate) {
+            return {
+                days: null,
+                color: "secondary",
+                text: "未設定期限",
+                usable: true,
+                urgent: false
+            };
+        }
+
         const days = dayNumber(expiryDate) - dayNumber(today);
-        if (!Number.isFinite(days)) return { days: null, color: "danger", text: "日期無效", usable: false, urgent: false };
-        if (days < 0) return { days, color: "danger", text: `已逾期 ${-days} 天`, usable: false, urgent: false };
-        if (days <= 3) return { days, color: "warning", text: days === 0 ? "今天到期" : `剩餘 ${days} 天`, usable: true, urgent: true };
-        return { days, color: "success", text: `剩餘 ${days} 天`, usable: true, urgent: false };
+
+        if (!Number.isFinite(days)) {
+            return {
+                days: null,
+                color: "danger",
+                text: "日期無效",
+                usable: false,
+                urgent: false
+            };
+        }
+
+        if (days < 0) {
+            return {
+                days,
+                color: "danger",
+                text: `已逾期 ${-days} 天`,
+                usable: false,
+                urgent: false
+            };
+        }
+
+        if (days <= 3) {
+            return {
+                days,
+                color: "warning",
+                text: days === 0 ? "今天到期" : `剩餘 ${days} 天`,
+                usable: true,
+                urgent: true
+            };
+        }
+
+        return {
+            days,
+            color: "success",
+            text: `剩餘 ${days} 天`,
+            usable: true,
+            urgent: false
+        };
     }
 
     // 暫定整合格式；B 的不同欄位請先轉換成此格式
     function adaptFridgeItems(items) {
+
         return items.filter(function (item) {
             return item && ingredientById(item.ingredient_id);
         }).map(function (item, i) {
+
             const master = ingredientById(item.ingredient_id);
+
             return {
                 id: String(item.id == null ? "row_" + i : item.id),
                 ingredient_id: master.ingredient_id,
@@ -92,16 +170,23 @@
     }
 
     function availableInventory(items, today) {
+
         const available = {};
 
         for (const item of items) {
+
             const status = expiryStatus(item.expiryDate, today);
+
             if (!status.usable) continue;
 
             const id = item.ingredient_id;
 
             // 重複庫存只計一種；有即期批次就保留最早到期日
-            if (!available[id] || (status.urgent && (!available[id].urgent || status.days < available[id].days))) {
+            if (
+                !available[id] ||
+                (status.urgent &&
+                    (!available[id].urgent || status.days < available[id].days))
+            ) {
                 available[id] = status;
             }
         }
@@ -111,14 +196,22 @@
 
     // 3. 智慧配對：資料與畫面分開
     function matchRecipe(recipe, available) {
-        const required = Array.from(new Set(Array.isArray(recipe.requiredIngredients) ? recipe.requiredIngredients : []));
+
+        const required = Array.from(new Set(
+            Array.isArray(recipe.requiredIngredients)
+                ? recipe.requiredIngredients : []
+        ));
+
         const ownedIngredients = [];
         const missingIngredients = [];
         const urgentIngredients = [];
+
         let earliestDays = Infinity;
 
         for (const id of required) {
+
             if (Object.prototype.hasOwnProperty.call(available, id)) {
+
                 ownedIngredients.push(id);
 
                 if (available[id].urgent) {
@@ -137,13 +230,20 @@
         const matchPercent = canCook ? 100 : Math.min(99, Math.round(ratio * 100));
 
         return {
-            recipe, valid, canCook, ratio, matchPercent,
-            ownedIngredients, missingIngredients,
-            urgentIngredients, earliestDays
+            recipe,
+            valid,
+            canCook,
+            ratio,
+            matchPercent,
+            ownedIngredients,
+            missingIngredients,
+            urgentIngredients,
+            earliestDays
         };
     }
 
     function calculateRecommendations(items, recipeData, today = localDate(new Date())) {
+
         const available = availableInventory(adaptFridgeItems(items), today);
 
         return recipeData.map(function (recipe) {
@@ -151,23 +251,42 @@
         });
     }
 
-    // 4. 排序與篩選：全齊 > 即期（最近到期、種類數）> 匹配 > 時間 > ID
+    // 4. 排序與篩選
+    // 全齊 > 即期（最近到期、種類數）> 匹配 > 時間 > ID
     function compareRecipes(a, b) {
-        if (a.canCook !== b.canCook) return a.canCook ? -1 : 1;
-        if (a.earliestDays !== b.earliestDays) return a.earliestDays < b.earliestDays ? -1 : 1;
-        if (a.urgentIngredients.length !== b.urgentIngredients.length) return b.urgentIngredients.length - a.urgentIngredients.length;
-        if (a.ratio !== b.ratio) return b.ratio - a.ratio;
-        if (a.recipe.cookingTime !== b.recipe.cookingTime) return a.recipe.cookingTime - b.recipe.cookingTime;
+
+        if (a.canCook !== b.canCook)
+            return a.canCook ? -1 : 1;
+
+        if (a.earliestDays !== b.earliestDays)
+            return a.earliestDays < b.earliestDays ? -1 : 1;
+
+        if (a.urgentIngredients.length !== b.urgentIngredients.length)
+            return b.urgentIngredients.length - a.urgentIngredients.length;
+
+        if (a.ratio !== b.ratio)
+            return b.ratio - a.ratio;
+
+        if (a.recipe.cookingTime !== b.recipe.cookingTime)
+            return a.recipe.cookingTime - b.recipe.cookingTime;
 
         return String(a.recipe.recipeId).localeCompare(String(b.recipe.recipeId));
     }
 
     function filterRecipes(data, filters) {
+
         return data.filter(function (r) {
+
             if (filters.zero && !r.canCook) return false;
-            if (filters.time !== "all" && r.recipe.cookingTime > Number(filters.time)) return false;
-            if (filters.difficulty !== "all" && r.recipe.difficulty !== filters.difficulty) return false;
-            if (filters.diet !== "all" && !r.recipe.dietTags.includes(filters.diet)) return false;
+
+            if (filters.time !== "all" &&
+                r.recipe.cookingTime > Number(filters.time)) return false;
+
+            if (filters.difficulty !== "all" &&
+                r.recipe.difficulty !== filters.difficulty) return false;
+
+            if (filters.diet !== "all" &&
+                !r.recipe.dietTags.includes(filters.diet)) return false;
 
             return true;
 
@@ -176,9 +295,11 @@
 
     // 5. 智慧補貨：直接重用缺少食材，不再重做配對
     function calculateRestock(data) {
+
         const groups = {};
 
         for (const r of data) {
+
             if (!r.valid || r.missingIngredients.length !== 1) continue;
 
             const id = r.missingIngredients[0];
@@ -198,12 +319,14 @@
         }
 
         return Object.values(groups).sort(function (a, b) {
-            return b.recipeIds.length - a.recipeIds.length || a.ingredient_id.localeCompare(b.ingredient_id);
+            return b.recipeIds.length - a.recipeIds.length ||
+                a.ingredient_id.localeCompare(b.ingredient_id);
         });
     }
 
-    // 6. 畫面渲染與測試冰箱
+    // 6. 畫面渲染與暫用冰箱
     function renderFridge() {
+
         if (!mockMode) return;
 
         $("mockFridgeList").innerHTML = fridgeItems.map(function (item, i) {
@@ -212,29 +335,71 @@
 
             return `<div class="fridge-item">
                 <strong>${escapeHTML(item.ingredient_name)}</strong>
+
                 <span class="badge bg-${s.color} ${s.color === "warning" ? "text-dark" : ""}">
                     ${escapeHTML(s.text)}
                 </span>
+
                 <div class="d-flex gap-2 mt-2">
+
                     <input type="date" class="form-control form-control-sm"
                         aria-label="${escapeHTML(item.ingredient_name)}到期日"
                         data-date="${i}" value="${escapeHTML(item.expiryDate)}">
+
                     <button type="button" class="btn btn-outline-danger btn-sm"
                         data-remove="${i}">刪除</button>
+
                 </div>
             </div>`;
 
         }).join("") || '<p class="text-muted">目前沒有食材。</p>';
     }
 
-    function renderRecipes() {
+    // V1.1 新增：取得目前符合條件的食譜
+    // 推薦列表與料理抽籤共同使用此函式
+    function currentFilteredRecipes() {
 
-        const filtered = filterRecipes(results, {
+        return filterRecipes(results, {
             time: $("timeFilter").value,
             difficulty: $("difficultyFilter").value,
             diet: $("dietFilter").value,
             zero: $("zeroShopping").checked
         });
+    }
+
+    // V1.1 新增：料理抽籤機
+    function drawRandomRecipe() {
+
+        const candidates = currentFilteredRecipes();
+        const notice = $("randomRecipeMessage");
+
+        // 沒有任何符合條件的料理
+        if (candidates.length === 0) {
+
+            if (notice) {
+                notice.textContent =
+                    "目前沒有符合條件的料理，請試著放寬篩選條件。";
+            }
+
+            return;
+        }
+
+        // 產生 0 到候選數量減 1 的隨機整數
+        const index = Math.floor(Math.random() * candidates.length);
+
+        if (notice) notice.textContent = "";
+
+        // 沿用原有的食譜詳情視窗
+        showRecipe(candidates[index].recipe.recipeId);
+    }
+
+    function renderRecipes() {
+
+        const filtered = currentFilteredRecipes();
+
+        if ($("randomRecipeMessage")) {
+            $("randomRecipeMessage").textContent = "";
+        }
 
         $("recipeCount").textContent = filtered.length;
 
@@ -308,13 +473,16 @@
         $("restockList").innerHTML = calculateRestock(results).map(function (g) {
 
             return `<div class="restock-item">
+
                 <strong>
                     補買 ${escapeHTML(ingredientName(g.ingredient_id))}，
                     可額外解鎖 ${g.recipeIds.length} 道料理。
                 </strong>
+
                 <p class="mb-0 mt-2">
                     ${escapeHTML(g.recipeNames.join("、"))}
                 </p>
+
             </div>`;
 
         }).join("") || '<p class="text-muted">目前沒有只需補買一項即可解鎖的料理。</p>';
@@ -328,7 +496,9 @@
             return item.ingredient_id;
         })).size;
 
-        $("expiringCount").textContent = Object.values(availableInventory(fridgeItems)).filter(function (s) {
+        $("expiringCount").textContent = Object.values(
+            availableInventory(fridgeItems)
+        ).filter(function (s) {
             return s.urgent;
         }).length;
 
@@ -349,7 +519,9 @@
 
         refresh();
 
-        if (!saved) message("目前已更新庫存畫面，但未能儲存。", "warning");
+        if (!saved) {
+            message("目前已更新庫存畫面，但未能儲存。", "warning");
+        }
     }
 
     function showRecipe(id) {
@@ -379,6 +551,8 @@
             <p>已具備：${escapeHTML(names(r.ownedIngredients))}</p>
             <p>缺少：${escapeHTML(names(r.missingIngredients))}</p>
 
+            ${!r.valid ? '<p class="text-danger">必要食材尚未設定，無法判定是否可料理。</p>' : ""}
+
             <h3 class="h5">料理步驟</h3>
 
             <ol>
@@ -394,9 +568,20 @@
         $("modalAddShoppingBtn").disabled = !r.valid || r.canCook;
 
         if (window.bootstrap && bootstrap.Modal) {
+
             bootstrap.Modal.getOrCreateInstance($("recipeModal")).show();
+
         } else {
-            alert(recipe.name + "\n必要食材：" + names(recipe.requiredIngredients || []) + "\n" + (recipe.steps || []).join("\n"));
+
+            alert(
+                recipe.name +
+                "\n匹配度：" + r.matchPercent + "%" +
+                "\n必要食材：" + names(recipe.requiredIngredients || []) +
+                "\n已具備：" + names(r.ownedIngredients) +
+                "\n缺少：" + names(r.missingIngredients) +
+                (!r.valid ? "\n必要食材尚未設定，無法判定是否可料理。" : "") +
+                "\n" + (recipe.steps || []).join("\n")
+            );
         }
     }
 
@@ -465,7 +650,9 @@
 
         renderShopping();
 
-        if (!saved) message("採買清單已更新，但未能儲存。", "warning");
+        if (!saved) {
+            message("採買清單已更新，但未能儲存。", "warning");
+        }
 
         return saved;
     }
@@ -491,11 +678,13 @@
 
         if (!shoppingList.length) return;
 
-        const text = "Fridge Rescue 採買清單\n" + shoppingList.map(function (item) {
+        const text = "Fridge Rescue 採買清單\n" +
+            shoppingList.map(function (item) {
 
-            return (item.purchased ? "[已購買] " : "[未購買] ") + ingredientName(item.ingredient_id);
+                return (item.purchased ? "[已購買] " : "[未購買] ") +
+                    ingredientName(item.ingredient_id);
 
-        }).join("\n");
+            }).join("\n");
 
         function fallback() {
 
@@ -539,13 +728,15 @@
             select.appendChild(option);
         }
 
+        // 新增冰箱食材
         $("mockFridgeForm").addEventListener("submit", function (event) {
 
             event.preventDefault();
 
             if (!mockMode || !ingredientById(select.value)) return;
 
-            const id = "mock_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+            const id = "mock_" + Date.now() + "_" +
+                Math.random().toString(36).slice(2);
 
             updateMockInventory(fridgeItems.concat([{
                 id,
@@ -556,6 +747,7 @@
             event.target.reset();
         });
 
+        // 刪除冰箱食材
         $("mockFridgeList").addEventListener("click", function (event) {
 
             if (!mockMode || event.target.dataset.remove === undefined) return;
@@ -565,20 +757,26 @@
             updateMockInventory(fridgeItems);
         });
 
+        // 修改食材到期日
         $("mockFridgeList").addEventListener("change", function (event) {
 
             if (!mockMode || event.target.dataset.date === undefined) return;
 
-            fridgeItems[Number(event.target.dataset.date)].expiryDate = event.target.value;
+            fridgeItems[Number(event.target.dataset.date)].expiryDate =
+                event.target.value;
 
             updateMockInventory(fridgeItems);
         });
 
+        // 載入示範資料前，保護原有個人庫存
         $("loadDemoBtn").addEventListener("click", function () {
 
             if (!mockMode) return;
 
-            if (fridgeItems.length && !confirm("載入測試資料會取代目前模擬庫存，確定嗎？")) return;
+            if (fridgeItems.length &&
+                !confirm("載入示範資料會取代目前冰箱庫存，確定嗎？")) {
+                return;
+            }
 
             updateMockInventory([
                 {
@@ -599,13 +797,15 @@
             ]);
         });
 
+        // 清空冰箱前確認
         $("clearFridgeBtn").addEventListener("click", function () {
 
-            if (mockMode && confirm("清空測試庫存？")) {
+            if (mockMode && confirm("確定要清空冰箱中的所有食材嗎？")) {
                 updateMockInventory([]);
             }
         });
 
+        // 料理條件篩選
         for (const id of ["timeFilter", "difficultyFilter", "dietFilter", "zeroShopping"]) {
 
             $(id).addEventListener("change", renderRecipes);
@@ -621,6 +821,12 @@
 
             renderRecipes();
         });
+
+        // V1.1 新增：料理抽籤按鈕
+        // 保留與舊 HTML 的相容性
+        if ($("randomRecipeBtn")) {
+            $("randomRecipeBtn").addEventListener("click", drawRandomRecipe);
+        }
 
         $("recipeList").addEventListener("click", function (event) {
 
@@ -642,7 +848,8 @@
 
             if (event.target.dataset.check === undefined) return;
 
-            shoppingList[Number(event.target.dataset.check)].purchased = event.target.checked;
+            shoppingList[Number(event.target.dataset.check)].purchased =
+                event.target.checked;
 
             updateShopping();
         });

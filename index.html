@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
@@ -88,7 +89,7 @@
                         <div id="mockFridgePanel">
 
                             <div class="alert alert-secondary">
-                                A 版開發測試專用，非正式冰箱模組。
+                                目前可記錄個人冰箱食材，正式冰箱管理模組尚待整合。
                             </div>
 
                             <form id="mockFridgeForm">
@@ -119,7 +120,7 @@
 
                                 <button type="submit"
                                     class="btn btn-success w-100">
-                                    新增測試食材
+                                    新增食材
                                 </button>
 
                             </form>
@@ -136,17 +137,21 @@
 
                                 <button type="button" id="loadDemoBtn"
                                     class="btn btn-outline-success btn-sm">
-                                    載入測試資料
+                                    載入示範資料
                                 </button>
 
                                 <button type="button" id="clearFridgeBtn"
                                     class="btn btn-outline-danger btn-sm">
-                                    清空測試庫存
+                                    清空冰箱
                                 </button>
 
                             </div>
 
                         </div>
+
+                        <small class="text-muted d-block mt-3">
+                            庫存與採買清單保存在目前瀏覽器，不會跨裝置同步。
+                        </small>
 
                         <small class="text-muted d-block mt-3">
                             保存期限燈號僅反映輸入日期，不代表食品安全鑑定。
@@ -161,6 +166,7 @@
             <section class="col-lg-8" id="recipeSection">
 
                 <h2 class="h4 mb-3">智慧食譜推薦</h2>
+                <p class="text-muted small">目前提供五道開發用食譜，正式食譜尚待整合。</p>
 
                 <div class="card mb-3">
                     <div class="card-body">
@@ -227,6 +233,27 @@
                             class="btn btn-outline-secondary btn-sm mt-3">
                             重設篩選
                         </button>
+
+                    </div>
+                </div>
+
+                <!-- P1 料理抽籤：沿用目前篩選結果及食譜詳情 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                        <h3 class="h5">今天吃什麼？</h3>
+
+                        <p class="text-muted mb-2">
+                            從目前符合條件的料理中隨機選擇一道。
+                        </p>
+
+                        <button type="button" id="randomRecipeBtn"
+                            class="btn btn-success">
+                            幫我抽一道料理
+                        </button>
+
+                        <div id="randomRecipeMessage" class="mt-2"
+                            role="status" aria-live="polite"></div>
 
                     </div>
                 </div>
@@ -366,7 +393,7 @@
         <p>Fridge Rescue｜網站企劃課程專案</p>
 
         <small>
-            A 版核心功能測試・食譜及介面尚未正式整合
+            V1.1 初步開發版・正式冰箱、食譜及介面尚待整合
         </small>
 
     </footer>
