@@ -1,7 +1,6 @@
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,334 +18,503 @@
 <body>
 
     <!-- 頂端導覽列 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow-sm py-2">
         <div class="container">
-            <a class="navbar-brand" href="#">Fridge Rescue</a>
+            <a class="navbar-brand" href="#">
+                Fridge Rescue
+            </a>
 
-            <button class="navbar-toggler" type="button"
+            <button
+                class="navbar-toggler"
+                type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#mainNavbar">
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="切換導覽選單">
+
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#fridgeSection">我的冰箱</a>
+                        <a class="nav-link" href="#fridgeSection">
+                            我的冰箱
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#recipeSection">食譜推薦</a>
+                        <a class="nav-link" href="#shoppingSection">
+                            採買清單
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#restockSection">智慧補貨</a>
+                        <a class="nav-link" href="#recipeSection">
+                            食譜推薦
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#shoppingSection">採買清單</a>
+                        <a class="nav-link" href="#restockSection">
+                            智慧補貨
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- 網站標題 -->
-    <header class="text-center py-5">
+    <!-- 精簡統計橫幅 -->
+    <header class="compact-header py-2 border-bottom">
         <div class="container">
-            <h1>Fridge Rescue</h1>
-            <h2 class="h4">智慧冰箱剩食推薦與保鮮管家</h2>
-            <p>不用先想吃什麼，先看看冰箱裡有什麼。</p>
+            <div class="d-flex flex-wrap gap-2">
 
-            <div>
-                <span class="badge bg-success">
-                    庫存食材：<span id="inventoryCount">0</span>
+                <span class="badge bg-success px-2 py-1">
+                    庫存食材：
+                    <span id="inventoryCount">0</span>
                 </span>
 
-                <span class="badge bg-warning text-dark">
-                    即期食材：<span id="expiringCount">0</span>
+                <span class="badge bg-warning text-dark px-2 py-1">
+                    即期食材：
+                    <span id="expiringCount">0</span>
                 </span>
 
-                <span class="badge bg-primary">
-                    零採買料理：<span id="availableRecipeCount">0</span>
+                <span class="badge bg-primary px-2 py-1">
+                    零採買料理：
+                    <span id="availableRecipeCount">0</span>
                 </span>
+
             </div>
         </div>
     </header>
 
     <!-- 網站主要內容 -->
-    <main class="container pb-5">
+    <main class="container py-3">
 
-        <div id="appMessage" role="status" aria-live="polite"></div>
+        <div
+            id="appMessage"
+            role="status"
+            aria-live="polite">
+        </div>
 
-        <div class="row g-4">
+        <div class="row g-3">
 
-            <!-- 模擬冰箱區：未來由 B 的正式模組取代 -->
+            <!-- 左欄：我的冰箱與智慧補貨 -->
             <aside class="col-lg-4" id="fridgeSection">
 
-                <div class="card">
+                <!-- 我的冰箱 -->
+                <div class="card mb-3">
                     <div class="card-body">
 
-                        <h2 class="h4">我的冰箱</h2>
+                        <h2 class="h5 mb-3">
+                            🧊 我的冰箱
+                        </h2>
 
                         <div id="mockFridgePanel">
 
-                            <div class="alert alert-secondary">
-                                目前可記錄個人冰箱食材，正式冰箱管理模組尚待整合。
-                            </div>
-
                             <form id="mockFridgeForm">
 
-                                <div class="mb-3">
-                                    <label for="ingredientSelect" class="form-label">
+                                <!-- 選擇食材 -->
+                                <div class="mb-2">
+
+                                    <label
+                                        for="ingredientSelect"
+                                        class="form-label small fw-bold mb-1">
                                         選擇食材
                                     </label>
 
-                                    <select id="ingredientSelect"
-                                        class="form-select" required>
-                                        <option value="">請選擇食材</option>
+                                    <select
+                                        id="ingredientSelect"
+                                        class="form-select form-select-sm"
+                                        required>
+
+                                        <option value="">
+                                            請選擇食材
+                                        </option>
                                     </select>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="expiryDate" class="form-label">
+                                <!-- 數量與單位 -->
+                                <div class="row g-2 mb-2">
+
+                                    <div class="col-6">
+
+                                        <label
+                                            for="ingredientQuantity"
+                                            class="form-label small fw-bold mb-1">
+                                            數量
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            id="ingredientQuantity"
+                                            class="form-control form-control-sm"
+                                            min="0.01"
+                                            step="any"
+                                            placeholder="例如：6"
+                                            required>
+                                    </div>
+
+                                    <div class="col-6">
+
+                                        <label
+                                            for="ingredientUnit"
+                                            class="form-label small fw-bold mb-1">
+                                            單位
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            id="ingredientUnit"
+                                            class="form-control form-control-sm"
+                                            placeholder="選擇食材後顯示"
+                                            readonly
+                                            aria-label="食材建議單位">
+                                    </div>
+                                </div>
+
+                                <!-- 到期日期 -->
+                                <div class="mb-2">
+
+                                    <label
+                                        for="expiryDate"
+                                        class="form-label small fw-bold mb-1">
                                         到期日期
                                     </label>
 
-                                    <input type="date" id="expiryDate"
-                                        class="form-control">
+                                    <input
+                                        type="date"
+                                        id="expiryDate"
+                                        class="form-control form-control-sm">
 
-                                    <small class="text-muted">
+                                    <small
+                                        class="text-muted"
+                                        style="font-size:12px;">
                                         未設定日期也可以參與配對。
                                     </small>
                                 </div>
 
-                                <button type="submit"
-                                    class="btn btn-success w-100">
-                                    新增食材
+                                <button
+                                    type="submit"
+                                    class="btn btn-success btn-sm w-100 mt-1">
+                                    ＋ 新增食材
                                 </button>
-
                             </form>
 
-                            <hr>
+                            <hr class="my-3">
 
-                            <h3 class="h5">目前庫存</h3>
+                            <!-- 目前庫存 -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
 
-                            <div id="mockFridgeList">
-                                <p class="text-muted">目前沒有食材。</p>
+                                <h3 class="h6 mb-0 fw-bold">
+                                    目前庫存
+                                </h3>
+
+                                <div class="d-flex gap-1">
+
+                                    <button
+                                        type="button"
+                                        id="loadDemoBtn"
+                                        class="btn btn-outline-success btn-sm py-0 px-2"
+                                        style="font-size:12px;">
+                                        載入示範
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        id="clearFridgeBtn"
+                                        class="btn btn-outline-danger btn-sm py-0 px-2"
+                                        style="font-size:12px;">
+                                        清空
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="d-flex flex-wrap gap-2 mt-3">
+                            <div
+                                id="mockFridgeList"
+                                class="fridge-scroll-area">
 
-                                <button type="button" id="loadDemoBtn"
-                                    class="btn btn-outline-success btn-sm">
-                                    載入示範資料
-                                </button>
-
-                                <button type="button" id="clearFridgeBtn"
-                                    class="btn btn-outline-danger btn-sm">
-                                    清空冰箱
-                                </button>
-
+                                <p class="text-muted small mb-0">
+                                    目前沒有食材。
+                                </p>
                             </div>
-
                         </div>
 
-                        <small class="text-muted d-block mt-3">
-                            庫存與採買清單保存在目前瀏覽器，不會跨裝置同步。
+                        <small
+                            class="text-muted d-block mt-2"
+                            style="font-size:12px;">
+                            ＊保存期限燈號僅反映輸入日期，不代表食品安全鑑定。
                         </small>
-
-                        <small class="text-muted d-block mt-3">
-                            保存期限燈號僅反映輸入日期，不代表食品安全鑑定。
-                        </small>
-
                     </div>
                 </div>
 
-            </aside>
-
-            <!-- 智慧食譜推薦 -->
-            <section class="col-lg-8" id="recipeSection">
-
-                <h2 class="h4 mb-3">智慧食譜推薦</h2>
-                <p class="text-muted small">目前提供五道開發用食譜，正式食譜尚待整合。</p>
-
-                <div class="card mb-3">
+                <!-- 智慧補貨 -->
+                <div class="card" id="restockSection">
                     <div class="card-body">
 
-                        <!-- 篩選條件 -->
-                        <div class="row g-3">
+                        <h2 class="h5 mb-1">
+                            💡 智慧補貨推薦
+                        </h2>
 
-                            <div class="col-md-4">
-                                <label for="timeFilter" class="form-label">
-                                    料理時間
-                                </label>
-
-                                <select id="timeFilter" class="form-select">
-                                    <option value="all">不限時間</option>
-                                    <option value="10">10 分鐘以內</option>
-                                    <option value="20">20 分鐘以內</option>
-                                    <option value="30">30 分鐘以內</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="difficultyFilter" class="form-label">
-                                    料理難度
-                                </label>
-
-                                <select id="difficultyFilter" class="form-select">
-                                    <option value="all">不限難度</option>
-                                    <option value="簡單">簡單</option>
-                                    <option value="中等">中等</option>
-                                    <option value="困難">困難</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="dietFilter" class="form-label">
-                                    飲食偏好
-                                </label>
-
-                                <select id="dietFilter" class="form-select">
-                                    <option value="all">不限偏好</option>
-                                    <option value="蛋奶素">蛋奶素</option>
-                                    <option value="無肉">無肉</option>
-                                    <option value="無乳製品">無乳製品</option>
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <!-- 零採買模式 -->
-                        <div class="form-check form-switch mt-3">
-
-                            <input type="checkbox"
-                                class="form-check-input"
-                                id="zeroShopping">
-
-                            <label class="form-check-label"
-                                for="zeroShopping">
-                                零採買模式（只顯示食材全齊的料理）
-                            </label>
-
-                        </div>
-
-                        <button type="button" id="resetFiltersBtn"
-                            class="btn btn-outline-secondary btn-sm mt-3">
-                            重設篩選
-                        </button>
-
-                    </div>
-                </div>
-
-                <!-- P1 料理抽籤：沿用目前篩選結果及食譜詳情 -->
-                <div class="card mb-3">
-                    <div class="card-body">
-
-                        <h3 class="h5">今天吃什麼？</h3>
-
-                        <p class="text-muted mb-2">
-                            從目前符合條件的料理中隨機選擇一道。
-                        </p>
-
-                        <button type="button" id="randomRecipeBtn"
-                            class="btn btn-success">
-                            幫我抽一道料理
-                        </button>
-
-                        <div id="randomRecipeMessage" class="mt-2"
-                            role="status" aria-live="polite"></div>
-
-                    </div>
-                </div>
-
-                <p class="text-muted">
-                    符合條件的料理：<span id="recipeCount">0</span> 道
-                </p>
-
-                <!-- JavaScript 動態產生食譜卡片 -->
-                <div id="recipeList" class="row g-3"></div>
-
-            </section>
-
-        </div>
-
-        <!-- 智慧補貨及採買清單 -->
-        <div class="row g-4 mt-4">
-
-            <!-- 智慧補貨 -->
-            <section class="col-lg-6" id="restockSection">
-
-                <div class="card h-100">
-                    <div class="card-body">
-
-                        <h2 class="h4">智慧補貨推薦</h2>
-
-                        <p class="text-muted">
+                        <p class="text-muted small mb-2">
                             只多買一樣食材，就能解鎖更多料理。
                         </p>
 
-                        <!-- JavaScript 動態產生推薦結果 -->
                         <div id="restockList"></div>
-
                     </div>
                 </div>
+            </aside>
 
-            </section>
+            <!-- 右欄：採買清單與食譜推薦 -->
+            <section class="col-lg-8" id="recipeSection">
 
-            <!-- 採買清單 -->
-            <section class="col-lg-6" id="shoppingSection">
+                <!-- 我的採買清單 -->
+                <div
+                    class="card mb-3 border-success"
+                    id="shoppingSection">
 
-                <div class="card h-100">
-                    <div class="card-body">
+                    <div class="card-body py-3">
 
-                        <h2 class="h4">我的採買清單</h2>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
 
-                        <p class="text-muted">
-                            已購買 <span id="purchasedCount">0</span> /
-                            <span id="shoppingCount">0</span> 項
-                        </p>
+                            <div class="d-flex align-items-center gap-2">
 
-                        <!-- JavaScript 動態產生採買清單 -->
-                        <div id="shoppingList"></div>
+                                <h2 class="h5 mb-0 text-success">
+                                    🛒 我的採買清單
+                                </h2>
 
-                        <div class="d-flex flex-wrap gap-2 mt-3">
+                                <span class="badge bg-secondary">
+                                    已購買
+                                    <span id="purchasedCount">0</span> /
+                                    <span id="shoppingCount">0</span>
+                                    項
+                                </span>
+                            </div>
 
-                            <button type="button" id="copyShoppingBtn"
-                                class="btn btn-success">
-                                複製採買清單
-                            </button>
+                            <div class="d-flex gap-2">
 
-                            <button type="button" id="clearShoppingBtn"
-                                class="btn btn-outline-danger">
-                                清空清單
-                            </button>
+                                <button
+                                    type="button"
+                                    id="copyShoppingBtn"
+                                    class="btn btn-success btn-sm">
+                                    複製採買清單
+                                </button>
 
+                                <button
+                                    type="button"
+                                    id="clearShoppingBtn"
+                                    class="btn btn-outline-danger btn-sm">
+                                    清空清單
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- 複製功能的備援文字區 -->
-                        <div id="copyFallback" class="mt-3" hidden>
+                        <div
+                            id="shoppingList"
+                            class="shopping-grid">
+                        </div>
 
-                            <label for="shoppingCopyText" class="form-label">
+                        <!-- 複製功能備援 -->
+                        <div
+                            id="copyFallback"
+                            class="mt-2"
+                            hidden>
+
+                            <label
+                                for="shoppingCopyText"
+                                class="form-label small">
                                 請手動複製以下文字：
                             </label>
 
-                            <textarea id="shoppingCopyText"
-                                class="form-control"
-                                rows="5" readonly></textarea>
-
+                            <textarea
+                                id="shoppingCopyText"
+                                class="form-control form-control-sm"
+                                rows="3"
+                                readonly></textarea>
                         </div>
-
                     </div>
                 </div>
 
+                <!-- 篩選條件與料理抽籤機 -->
+                <div class="card mb-3">
+                    <div class="card-body py-3">
+
+                        <div class="row g-2 align-items-end">
+
+                            <!-- 料理時間 -->
+                            <div class="col-sm-4">
+
+                                <label
+                                    for="timeFilter"
+                                    class="form-label small fw-bold mb-1">
+                                    料理時間
+                                </label>
+
+                                <select
+                                    id="timeFilter"
+                                    class="form-select form-select-sm">
+
+                                    <option value="all">
+                                        不限時間
+                                    </option>
+
+                                    <option value="10">
+                                        10 分鐘以內
+                                    </option>
+
+                                    <option value="20">
+                                        20 分鐘以內
+                                    </option>
+
+                                    <option value="30">
+                                        30 分鐘以內
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- 料理難度 -->
+                            <div class="col-sm-4">
+
+                                <label
+                                    for="difficultyFilter"
+                                    class="form-label small fw-bold mb-1">
+                                    料理難度
+                                </label>
+
+                                <select
+                                    id="difficultyFilter"
+                                    class="form-select form-select-sm">
+
+                                    <option value="all">
+                                        不限難度
+                                    </option>
+
+                                    <option value="簡單">
+                                        簡單
+                                    </option>
+
+                                    <option value="中等">
+                                        中等
+                                    </option>
+
+                                    <option value="困難">
+                                        困難
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- 飲食偏好 -->
+                            <div class="col-sm-4">
+
+                                <label
+                                    for="dietFilter"
+                                    class="form-label small fw-bold mb-1">
+                                    飲食偏好
+                                </label>
+
+                                <select
+                                    id="dietFilter"
+                                    class="form-select form-select-sm">
+
+                                    <option value="all">
+                                        不限偏好
+                                    </option>
+
+                                    <option value="葷食">
+                                        葷食
+                                    </option>
+
+                                    <option value="蛋奶素">
+                                        蛋奶素
+                                    </option>
+
+                                    <option value="全素">
+                                        全素
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 pt-2 border-top">
+
+                            <!-- 零採買模式 -->
+                            <div class="form-check form-switch mb-0">
+
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="zeroShopping">
+
+                                <label
+                                    class="form-check-label small"
+                                    for="zeroShopping">
+                                    零採買模式（只顯示食材全齊）
+                                </label>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+
+                                <button
+                                    type="button"
+                                    id="randomRecipeBtn"
+                                    class="btn btn-warning btn-sm fw-bold">
+                                    🎲 今天吃什麼？（抽一道料理）
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="resetFiltersBtn"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    重設篩選
+                                </button>
+                            </div>
+                        </div>
+
+                        <div
+                            id="randomRecipeMessage"
+                            class="small text-danger mt-1"
+                            role="status"
+                            aria-live="polite">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 智慧食譜推薦列表 -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <h2 class="h5 mb-0">
+                        🍳 智慧食譜推薦
+                    </h2>
+
+                    <span class="text-muted small">
+                        符合條件的料理：
+                        <strong>
+                            <span id="recipeCount">0</span>
+                        </strong>
+                        道
+                    </span>
+                </div>
+
+                <div
+                    id="recipeList"
+                    class="row g-3">
+                </div>
             </section>
-
         </div>
-
     </main>
 
-    <!-- Bootstrap Modal：食譜詳情 -->
-    <div class="modal fade" id="recipeModal" tabindex="-1"
-        aria-labelledby="recipeModalTitle" aria-hidden="true">
+    <!-- ======================================
+         食譜詳情 Modal
+         ====================================== -->
+
+    <div
+        class="modal fade"
+        id="recipeModal"
+        tabindex="-1"
+        aria-labelledby="recipeModalTitle"
+        aria-hidden="true">
 
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
 
@@ -354,62 +522,184 @@
 
                 <div class="modal-header">
 
-                    <h2 class="modal-title h5" id="recipeModalTitle">
+                    <h2
+                        class="modal-title h5"
+                        id="recipeModalTitle">
                         食譜詳情
                     </h2>
 
-                    <button type="button" class="btn-close"
+                    <button
+                        type="button"
+                        class="btn-close"
                         data-bs-dismiss="modal"
-                        aria-label="關閉"></button>
-
+                        aria-label="關閉">
+                    </button>
                 </div>
 
-                <div class="modal-body" id="recipeModalBody"></div>
+                <div
+                    class="modal-body"
+                    id="recipeModalBody">
+                </div>
 
                 <div class="modal-footer">
 
-                    <button type="button" id="modalAddShoppingBtn"
-                        class="btn btn-success">
+                    <!-- 原本的採買功能 -->
+                    <button
+                        type="button"
+                        id="modalAddShoppingBtn"
+                        class="btn btn-outline-success">
                         加入採買清單
                     </button>
 
-                    <button type="button"
+                    <!-- V2.0 新增：完成料理入口 -->
+                    <button
+                        type="button"
+                        id="completeRecipeBtn"
+                        class="btn btn-success"
+                        disabled>
+                        ✓ 完成料理／更新庫存
+                    </button>
+
+                    <button
+                        type="button"
                         class="btn btn-secondary"
                         data-bs-dismiss="modal">
                         關閉
                     </button>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- 網站頁尾 -->
-    <footer class="bg-dark text-white text-center py-4">
+    <!-- ======================================
+         V2.0 新增：更新庫存 Modal
+         下一步由 myScript.js 接入操作邏輯
+         ====================================== -->
 
-        <p>Fridge Rescue｜網站企劃課程專案</p>
+    <div
+        class="modal fade"
+        id="cookingInventoryModal"
+        tabindex="-1"
+        aria-labelledby="cookingInventoryModalTitle"
+        aria-hidden="true">
 
-        <small>
-            V1.1 初步開發版・正式冰箱、食譜及介面尚待整合
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h2
+                        class="modal-title h5"
+                        id="cookingInventoryModalTitle">
+                        完成料理／更新庫存
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="關閉">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <p class="text-muted small mb-3">
+                        請選擇實際使用的食材批次與數量。
+                        系統不會自動根據食譜文字扣除食材，
+                        只有在確認後才會更新庫存。
+                    </p>
+
+                    <!-- 顯示目前要完成的料理 -->
+                    <div class="mb-3">
+
+                        <h3
+                            class="h6 fw-bold"
+                            id="cookingRecipeName">
+                            尚未選擇料理
+                        </h3>
+                    </div>
+
+                    <!-- 操作說明或警告訊息 -->
+                    <div
+                        id="cookingInventoryMessage"
+                        role="status"
+                        aria-live="polite">
+                    </div>
+
+                    <!--
+                        扣庫存表單：
+                        JavaScript 會依必要食材產生批次與數量欄位。
+                    -->
+                    <form id="cookingInventoryForm">
+
+                        <div
+                            id="cookingInventoryList">
+                        </div>
+                    </form>
+
+                    <p class="small text-muted mt-3 mb-0">
+                        注意：沒有數量、已過期或日期無效的庫存，
+                        不可直接進行扣除。
+                        配對度 100% 只表示食材種類齊全，
+                        不保證數量足夠。
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+
+                    <!-- 取消不更動庫存 -->
+                    <button
+                        type="button"
+                        id="cancelCookingBtn"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        取消
+                    </button>
+
+                    <!-- 下一步接入驗證與正式扣除功能 -->
+                    <button
+                        type="submit"
+                        form="cookingInventoryForm"
+                        id="confirmCookingBtn"
+                        class="btn btn-success"
+                        disabled>
+                        確認更新庫存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+
+        <p class="mb-1 small">
+            Fridge Rescue｜網站企劃課程專案
+        </p>
+
+        <small
+            class="text-white-50"
+            style="font-size:12px;">
+            庫存與採買清單保存在目前瀏覽器 (localStorage)
         </small>
-
     </footer>
 
     <!-- Bootstrap 5 JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- 食材主檔 -->
+    <!-- B 的食材主檔 -->
     <script src="ingredients.js"></script>
 
-    <!-- 測試食譜 -->
-    <script src="recipes.js"></script>
+    <!-- C 的 30 道正式食譜 -->
+    <script src="recipes-c.js"></script>
 
-    <!-- 主要功能程式 -->
+    <!-- C 食譜與 A 系統的資料格式轉換 -->
+    <script src="recipe-adapter.js"></script>
+
+    <!-- A 的主要功能程式 -->
     <script src="myScript.js"></script>
 
 </body>
-
 </html>
