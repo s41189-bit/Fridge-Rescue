@@ -31,6 +31,15 @@
         return ids.map(ingredientName).join("、") || "無";
     }
 
+    // 參考來源：只接受 http(s) 網址；synced 為步驟已依來源改寫，reference 為僅供參考
+    function sourceHTML(source) {
+        if (!source || !/^https?:\/\//i.test(source.url || "")) return "";
+
+        const label = source.type === "synced" ? "參考來源" : "參考連結";
+
+        return `<p class="mb-2">${label}：<a href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(source.title || source.url)}</a></p>`;
+    }
+
     function escapeHTML(value) {
         return String(value == null ? "" : value).replace(/[&<>"']/g, function (c) {
             return {
@@ -547,6 +556,7 @@
 
             ${recipe.image ? `<img class="img-fluid mb-3" src="${escapeHTML(recipe.image)}" alt="${escapeHTML(recipe.name)}">` : ""}
 
+            ${recipe.portions ? `<p>份量：${escapeHTML(recipe.portions)}</p>` : ""}
             <p>必要食材：${escapeHTML(names(recipe.requiredIngredients || []))}</p>
             <p>已具備：${escapeHTML(names(r.ownedIngredients))}</p>
             <p>缺少：${escapeHTML(names(r.missingIngredients))}</p>
@@ -561,8 +571,10 @@
                 }).join("")}
             </ol>
 
-            <small class="text-muted">
-                測試食譜；份量、常備調味料及食材安全請自行確認。
+            ${sourceHTML(recipe.source)}
+
+            <small class="text-muted d-block">
+                食譜為小組整理，部分步驟參考公開來源；份量、常備調味料及食材安全請自行確認。
             </small>`;
 
         $("modalAddShoppingBtn").disabled = !r.valid || r.canCook;
