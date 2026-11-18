@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>冰箱貼圖手動檢視</title>
+    <link rel="stylesheet" href="../mystyle.css">
+    <style>
+        body { padding: 16px; }
+        .buttons button { margin: 0 6px 6px 0; }
+    </style>
+</head>
+<body>
+    <h1 style="font-size:20px">冰箱貼圖手動檢視（不需 localStorage）</h1>
+    <div class="buttons" id="buttons"></div>
+    <div id="fridgeVisual"></div>
+
+    <script src="../ingredients.js"></script>
+    <script src="../fridgeVisual.js"></script>
+    <script>
+        // 簡化版 expiryStatus：OLD=逾期、SOON=快到期、其他=正常
+        const status = function (date) {
+            return { color: date === "OLD" ? "danger" : date === "SOON" ? "warning" : date ? "success" : "secondary" };
+        };
+
+        const make = function (id, date) {
+            const m = ingredients.find(function (i) { return i.ingredient_id === id; });
+            return { ingredient_id: id, ingredient_name: m.ingredient_name, category: m.category, expiryDate: date || "" };
+        };
+
+        const byCategory = function (category) {
+            return ingredients.filter(function (i) { return i.category === category; })
+                .map(function (i) { return make(i.ingredient_id, "2099-01-01"); });
+        };
+
+        const box = document.getElementById("fridgeVisual");
+        let current = [];
+        const show = function (items) {
+            current = items;
+            FridgeVisual.render(box, current, { expiryStatus: status, imageBase: "../images/web/" });
+        };
+
+        const scenarios = {
+            "空冰箱": function () { show([]); },
+            "三個示範食材": function () { show([make("ING_001", "SOON"), make("ING_021"), make("ING_030")]); },
+            "番茄兩筆（一筆逾期）": function () { show([make("ING_001", "2099-01-01"), make("ING_001", "OLD")]); },
+            "蛋奶豆製品 5 種（剛好滿）": function () { show(byCategory("蛋奶豆製品").slice(0, 5)); },
+            "蛋奶豆製品 6 種（+2）": function () { show(byCategory("蛋奶豆製品")); },
+            "蔬菜 12 種（+N）": function () { show(byCategory("蔬菜")); },
+            "全部 30 種": function () { show(ingredients.map(function (i) { return make(i.ingredient_id, "2099-01-01"); })); },
+            "再新增雞蛋（只有它彈出）": function () { show(current.concat([make("ING_021")])); }
+        };
+
+        for (const name of Object.keys(scenarios)) {
+            const b = document.createElement("button");
+            b.textContent = name;
+            b.addEventListener("click", scenarios[name]);
+            document.getElementById("buttons").appendChild(b);
+        }
+
+        // 網址 #場景名稱 可直接開啟指定場景（方便截圖）
+        const wanted = decodeURIComponent(location.hash.slice(1));
+        (scenarios[wanted] || scenarios["空冰箱"])();
+    </script>
+</body>
+</html>

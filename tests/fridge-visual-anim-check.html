@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><title>anim check</title></head>
+<body>
+<div id="box"></div><pre id="out"></pre>
+<script src="../ingredients.js"></script>
+<script src="../fridgeVisual.js"></script>
+<script>
+// 用 headless Chrome 檢查：chrome --headless --dump-dom tests/fridge-visual-anim-check.html | grep RESULT
+const st = function (d) { return { color: d === "OLD" ? "danger" : "success" }; };
+const mk = function (id) {
+    const m = ingredients.find(function (i) { return i.ingredient_id === id; });
+    return { ingredient_id: id, ingredient_name: m.ingredient_name, category: m.category, expiryDate: "" };
+};
+const box = document.getElementById("box");
+const pops = function () { return Array.from(box.querySelectorAll(".fv-pop")).map(function (n) { return n.title.split("｜")[0]; }); };
+const results = [];
+
+FridgeVisual.render(box, [mk("ING_001"), mk("ING_021")], { expiryStatus: st });
+results.push(["first render pops nothing", pops().length === 0]);
+
+FridgeVisual.render(box, [mk("ING_001"), mk("ING_021"), mk("ING_030")], { expiryStatus: st });
+results.push(["adding toast pops only toast", JSON.stringify(pops()) === JSON.stringify(["吐司"])]);
+
+FridgeVisual.render(box, [mk("ING_001"), mk("ING_021"), mk("ING_030")], { expiryStatus: st });
+results.push(["re-render without change pops nothing", pops().length === 0]);
+
+FridgeVisual.render(box, [], { expiryStatus: st });
+results.push(["empty shows hint", !!box.querySelector(".fv-empty")]);
+
+FridgeVisual.render(box, [mk("ING_001")], { expiryStatus: st });
+results.push(["adding after empty pops the new one", JSON.stringify(pops()) === JSON.stringify(["番茄"])]);
+
+const bad = mk("ING_001"); bad.ingredient_name = '<img src=x onerror=alert(1)>';
+FridgeVisual.render(box, [bad], { expiryStatus: st });
+results.push(["name is not interpreted as HTML", box.querySelectorAll("img").length === 2 /* fridge + sticker */]);
+
+document.getElementById("out").textContent = "RESULT " + results.map(function (r) { return (r[1] ? "PASS " : "FAIL ") + r[0]; }).join(" | ");
+</script></body></html>

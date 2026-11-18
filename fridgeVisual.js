@@ -70,5 +70,90 @@
         });
     }
 
-    root.FridgeVisual = { ZONES, groupItems, planZones };
+    // ---- 以下為 DOM 渲染（只在瀏覽器使用）----
+
+    function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+    }
+
+    function earliestExpiry(items, id) {
+        const dates = items
+            .filter(function (i) { return i.ingredient_id === id && i.expiryDate; })
+            .map(function (i) { return i.expiryDate; })
+            .sort();
+        return dates[0] || "";
+    }
+
+    function stickerNode(group, items, imageBase, animate) {
+        const item = el("span", "fv-item");
+        const date = earliestExpiry(items, group.ingredient_id);
+        const label = group.name +
+            (group.count > 1 ? " ×" + group.count : "") +
+            "｜" + (date ? "最早到期 " + date : "未設定到期日") +
+            (group.state === "expired" ? "（已逾期）" :
+                group.state === "soon" ? "（快到期）" : "");
+
+        if (group.state !== "ok") item.classList.add("fv-" + group.state);
+        if (animate) item.classList.add("fv-pop");
+        item.title = label;
+
+        const img = el("img", "fv-sticker");
+        img.src = imageBase + group.ingredient_id + ".png";
+        img.alt = label;
+        img.addEventListener("error", function () {
+            img.replaceWith(el("span", "fv-fallback", group.name));
+        });
+        item.appendChild(img);
+
+        if (group.count > 1) item.appendChild(el("span", "fv-count", "×" + group.count));
+
+        return item;
+    }
+
+    // 把庫存畫進冰箱。第一次呼叫不播動畫；之後只有新出現的食材會彈出。
+    function render(container, items, opts) {
+
+        const imageBase = (opts && opts.imageBase) || "images/web/";
+        const groups = groupItems(items, opts.expiryStatus);
+        const plan = planZones(groups);
+        const previous = container.__fvSeen || null;
+        const placed = plan.reduce(function (n, z) {
+            return n + z.shown.length + (z.overflow ? 1 : 0);
+        }, 0);
+
+        container.classList.add("fv-root");
+        container.replaceChildren();
+
+        const fridge = el("img", "fv-fridge");
+        fridge.src = imageBase + "fridge.png";
+        fridge.alt = "可愛的冰箱";
+        container.appendChild(fridge);
+
+        for (const zone of plan) {
+            const zoneNode = el("div", "fv-zone");
+            zoneNode.dataset.zone = zone.key;
+
+            for (const group of zone.shown) {
+                const animate = previous !== null && !previous.has(group.ingredient_id);
+                zoneNode.appendChild(stickerNode(group, items, imageBase, animate));
+            }
+
+            if (zone.overflow > 0) {
+                const more = el("span", "fv-item fv-more", "+" + zone.overflow);
+                more.title = "還有 " + zone.overflow + " 種食材，請看右側清單";
+                zoneNode.appendChild(more);
+            }
+
+            container.appendChild(zoneNode);
+        }
+
+        if (placed === 0) container.appendChild(el("p", "fv-empty", "冰箱空空的"));
+
+        container.__fvSeen = new Set(groups.map(function (g) { return g.ingredient_id; }));
+    }
+
+    root.FridgeVisual = { ZONES, groupItems, planZones, render };
 }());

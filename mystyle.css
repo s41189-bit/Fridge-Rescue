@@ -163,3 +163,151 @@ button {
         flex-wrap: wrap;
     }
 }
+/* ==============================
+   可愛冰箱（fridgeVisual.js）
+   ============================== */
+
+.fv-root {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.fv-fridge {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* 各層位置：以 1200×1600 原圖座標換算成百分比，貼圖站在層板上 */
+.fv-zone {
+    position: absolute;
+    left: 16.7%;
+    width: 41.6%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.fv-zone[data-zone="dairy"]  { top: 26.6%; height: 7.2%; }
+.fv-zone[data-zone="meat"]   { top: 35.6%; height: 10.3%; }
+.fv-zone[data-zone="staple"] { top: 47.8%; height: 10.3%; }
+.fv-zone[data-zone="veg"] {
+    top: 60%;
+    height: 15.9%;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    justify-content: flex-start;
+}
+
+.fv-item {
+    position: relative;
+    box-sizing: border-box;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 20%;
+    height: 100%;
+}
+
+.fv-zone[data-zone="veg"] .fv-item {
+    flex: 0 0 20%;
+    height: 50%;
+}
+
+.fv-sticker {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* 貼圖四周有透明邊，放大一點讓食物看得清楚；往上長，不蓋到層板 */
+    transform: scale(1.4);
+    transform-origin: 50% 88%;
+}
+
+.fv-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.1;
+}
+
+/* 到期標記：黃＝快到期，紅＝已逾期 */
+.fv-soon::after,
+.fv-expired::after {
+    content: "";
+    position: absolute;
+    left: 6%;
+    top: 4%;
+    width: 28%;
+    max-width: 12px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
+}
+
+.fv-soon::after { background-color: #ffc107; }
+.fv-expired::after { background-color: #dc3545; }
+.fv-expired .fv-sticker { opacity: 0.55; }
+
+.fv-count {
+    position: absolute;
+    right: -2px;
+    top: -3px;
+    min-width: 16px;
+    padding: 0 3px;
+    border-radius: 8px;
+    background-color: #198754;
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.fv-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 2px solid #5a3d2b;
+    color: #5a3d2b;
+    font-weight: bold;
+    font-size: 13px;
+    aspect-ratio: 1;
+    height: auto;
+    align-self: center;
+}
+
+.fv-empty {
+    position: absolute;
+    left: 62%;
+    top: 56%;
+    width: 29%;
+    margin: 0;
+    padding: 6px 4px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #5a3d2b;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* 新加入的食材：從上方彈進冰箱 */
+.fv-pop {
+    animation: fv-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fv-pop {
+    0%   { transform: translateY(-160%) scale(0.6); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fv-pop { animation: none; }
+}
