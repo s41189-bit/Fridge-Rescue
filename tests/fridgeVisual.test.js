@@ -89,3 +89,50 @@ test("empty input yields four empty zones in order", function () {
     assertEqual(plan.map(function (z) { return z.key; }), ["dairy", "meat", "staple", "veg"], "keys");
     assertEqual(plan.every(function (z) { return z.shown.length === 0 && z.overflow === 0; }), true, "all empty");
 });
+
+// ---- 最後審查後新增：「+N」不可吞掉最緊急的食材 ----
+const dairyWith = function (n, dates) {
+    const out = [];
+    for (let i = 1; i <= n; i++) {
+        const id = "D" + String(i).padStart(2, "0");
+        out.push(item(id, "蛋奶豆製品", dates[id] || "OK"));
+    }
+    return out;
+};
+
+test("overflow keeps the expired item visible even when its id sorts last", function () {
+    const groups = FridgeVisual.groupItems(dairyWith(6, { D06: "OLD" }), stub);
+    const zone = zoneOf(FridgeVisual.planZones(groups), "dairy");
+    assertEqual(zone.shown.map(function (g) { return g.ingredient_id; }).indexOf("D06") !== -1, true, "D06 shown");
+    assertEqual(zone.overflow, 2, "overflow");
+});
+
+test("overflow keeps soon-to-expire visible before ok items", function () {
+    const groups = FridgeVisual.groupItems(dairyWith(6, { D05: "SOON", D06: "OLD" }), stub);
+    const ids = zoneOf(FridgeVisual.planZones(groups), "dairy").shown.map(function (g) { return g.ingredient_id; });
+    assertEqual(ids.indexOf("D05") !== -1 && ids.indexOf("D06") !== -1, true, "D05 and D06 shown");
+});
+
+test("shown stickers stay ordered by ingredient id", function () {
+    const groups = FridgeVisual.groupItems(dairyWith(6, { D06: "OLD" }), stub);
+    const ids = zoneOf(FridgeVisual.planZones(groups), "dairy").shown.map(function (g) { return g.ingredient_id; });
+    assertEqual(ids, ["D01", "D02", "D03", "D06"], "ids");
+});
+
+test("hidden groups are listed with the worst hidden state", function () {
+    const allOld = {};
+    for (let i = 1; i <= 6; i++) allOld["D0" + i] = "OLD";
+    const zone = zoneOf(FridgeVisual.planZones(FridgeVisual.groupItems(dairyWith(6, allOld), stub)), "dairy");
+    assertEqual(zone.hidden.length, 2, "hidden count");
+    assertEqual(zone.overflowState, "expired", "overflowState");
+
+    const okZone = zoneOf(FridgeVisual.planZones(FridgeVisual.groupItems(dairyWith(6, {}), stub)), "dairy");
+    assertEqual(okZone.overflowState, "ok", "ok overflowState");
+    assertEqual(okZone.hidden.map(function (g) { return g.ingredient_id; }), ["D05", "D06"], "hidden ids");
+});
+
+test("no overflow means no hidden groups", function () {
+    const zone = zoneOf(FridgeVisual.planZones(FridgeVisual.groupItems(dairyWith(5, {}), stub)), "dairy");
+    assertEqual(zone.hidden, [], "hidden");
+    assertEqual(zone.overflow, 0, "overflow");
+});

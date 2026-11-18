@@ -298,6 +298,10 @@ button {
     text-align: center;
 }
 
+/* 「+N」收進了快到期或已逾期的食材時，用顏色提醒 */
+.fv-more-soon { border-color: #ffc107; color: #8a6d00; }
+.fv-more-expired { border-color: #dc3545; color: #dc3545; }
+
 /* 新加入的食材：從上方彈進冰箱 */
 .fv-pop {
     animation: fv-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);

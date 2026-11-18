@@ -7,9 +7,9 @@
 <script>
 // 用 headless Chrome 檢查：chrome --headless --dump-dom tests/fridge-visual-anim-check.html | grep RESULT
 const st = function (d) { return { color: d === "OLD" ? "danger" : "success" }; };
-const mk = function (id) {
+const mk = function (id, date) {
     const m = ingredients.find(function (i) { return i.ingredient_id === id; });
-    return { ingredient_id: id, ingredient_name: m.ingredient_name, category: m.category, expiryDate: "" };
+    return { ingredient_id: id, ingredient_name: m.ingredient_name, category: m.category, expiryDate: date || "" };
 };
 const box = document.getElementById("box");
 const pops = function () { return Array.from(box.querySelectorAll(".fv-pop")).map(function (n) { return n.title.split("｜")[0]; }); };
@@ -33,6 +33,13 @@ results.push(["adding after empty pops the new one", JSON.stringify(pops()) === 
 const bad = mk("ING_001"); bad.ingredient_name = '<img src=x onerror=alert(1)>';
 FridgeVisual.render(box, [bad], { expiryStatus: st });
 results.push(["name is not interpreted as HTML", box.querySelectorAll("img").length === 2 /* fridge + sticker */]);
+
+const six = ["ING_021", "ING_022", "ING_023", "ING_024", "ING_025", "ING_026"].map(function (id) { return mk(id, "OLD"); });
+FridgeVisual.render(box, six, { expiryStatus: st });
+const more = box.querySelector(".fv-more");
+results.push(["+N tooltip names the hidden foods", !!more && more.title.indexOf("板豆腐") !== -1 && more.title.indexOf("無糖優格") !== -1]);
+results.push(["+N tooltip does not point to a list that may be hidden", !!more && more.title.indexOf("清單") === -1]);
+results.push(["+N turns red when it hides an expired food", !!more && more.classList.contains("fv-more-expired")]);
 
 document.getElementById("out").textContent = "RESULT " + results.map(function (r) { return (r[1] ? "PASS " : "FAIL ") + r[0]; }).join(" | ");
 </script></body></html>

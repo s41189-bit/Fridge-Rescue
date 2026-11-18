@@ -50,22 +50,37 @@
         });
     }
 
-    // 依分類放進各層；超過上限時只顯示 上限-1 張，其餘併入「+N」
+    function byId(a, b) {
+        return a.ingredient_id.localeCompare(b.ingredient_id);
+    }
+
+    // 依分類放進各層；超過上限時只顯示 上限-1 張，其餘併入「+N」。
+    // 留下哪些貼圖依緊急程度決定（逾期、快到期優先），避免最該注意的食材被收進「+N」；
+    // 留下的貼圖仍依 ingredient_id 排序，版面才穩定。
     function planZones(groups) {
         return ZONES.map(function (zone) {
             const inZone = groups.filter(function (g) {
                 return g.category === zone.category;
-            });
+            }).sort(byId);
 
             if (inZone.length <= zone.capacity) {
-                return { key: zone.key, shown: inZone, overflow: 0 };
+                return { key: zone.key, shown: inZone, overflow: 0, overflowState: "ok", hidden: [] };
             }
 
             const keep = zone.capacity - 1;
+            const ranked = inZone.slice().sort(function (a, b) {
+                return SEVERITY[b.state] - SEVERITY[a.state] || byId(a, b);
+            });
+            const hidden = ranked.slice(keep).sort(byId);
+
             return {
                 key: zone.key,
-                shown: inZone.slice(0, keep),
-                overflow: inZone.length - keep
+                shown: ranked.slice(0, keep).sort(byId),
+                overflow: hidden.length,
+                overflowState: hidden.reduce(function (worst, g) {
+                    return SEVERITY[g.state] > SEVERITY[worst] ? g.state : worst;
+                }, "ok"),
+                hidden: hidden
             };
         });
     }
@@ -143,7 +158,12 @@
 
             if (zone.overflow > 0) {
                 const more = el("span", "fv-item fv-more", "+" + zone.overflow);
-                more.title = "還有 " + zone.overflow + " 種食材，請看右側清單";
+                if (zone.overflowState !== "ok") more.classList.add("fv-more-" + zone.overflowState);
+                more.title = "還有 " + zone.overflow + " 種：" +
+                    zone.hidden.map(function (g) { return g.name; }).join("、") +
+                    (zone.overflowState === "expired" ? "（含已逾期）" :
+                        zone.overflowState === "soon" ? "（含快到期）" : "");
+                more.setAttribute("aria-label", more.title);
                 zoneNode.appendChild(more);
             }
 
