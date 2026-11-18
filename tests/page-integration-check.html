@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><title>page integration check</title></head>
+<body>
+<iframe id="app" src="../index.html" style="width:1200px;height:900px"></iframe>
+<pre id="out"></pre>
+<script>
+// 在真正的 index.html 裡操作並檢查。需允許 file:// 跨檔存取：
+// chrome --headless=new --allow-file-access-from-files --virtual-time-budget=8000 --dump-dom tests/page-integration-check.html | grep -o "CHECK [A-Z]* [^|<]*"
+const frame = document.getElementById("app");
+const results = [];
+const check = function (name, ok) { results.push((ok ? "PASS " : "FAIL ") + name); };
+
+frame.addEventListener("load", function () {
+    const w = frame.contentWindow, d = frame.contentDocument;
+    const errors = [];
+    w.addEventListener("error", function (e) { errors.push(e.message); });
+    w.confirm = function () { return true; };
+    w.localStorage.clear();
+
+    const box = d.getElementById("fridgeVisual");
+    const add = function (id, date) {
+        d.getElementById("ingredientSelect").value = id;
+        d.getElementById("expiryDate").value = date || "";
+        d.getElementById("mockFridgeForm").requestSubmit();
+    };
+    const items = function () { return box.querySelectorAll(".fv-item:not(.fv-more)"); };
+
+    try {
+        w.FridgeRescue.refresh();
+        check("fridge image present", !!box.querySelector("img.fv-fridge"));
+        check("empty fridge shows hint", !!box.querySelector(".fv-empty"));
+
+        add("ING_001", "2099-01-01");
+        check("adding tomato shows 1 sticker", items().length === 1);
+        check("new sticker pops", box.querySelectorAll(".fv-pop").length === 1);
+        check("sticker is in the veg zone", !!box.querySelector('.fv-zone[data-zone="veg"] .fv-item'));
+
+        add("ING_001", "2000-01-01");
+        check("same ingredient twice stays 1 sticker with x2", items().length === 1 && !!box.querySelector(".fv-count"));
+        check("one expired record turns the sticker red", !!box.querySelector(".fv-expired"));
+        check("second add of same ingredient does not pop", box.querySelectorAll(".fv-pop").length === 0);
+
+        add("ING_021", "");
+        check("egg lands in dairy zone", !!box.querySelector('.fv-zone[data-zone="dairy"] .fv-item'));
+
+        d.getElementById("clearFridgeBtn").click();
+        check("clearing removes stickers and shows hint", items().length === 0 && !!box.querySelector(".fv-empty"));
+
+        d.getElementById("loadDemoBtn").click();
+        check("demo data shows 3 stickers", items().length === 3);
+
+        const recipeCount = d.getElementById("recipeCount").textContent;
+        check("recipe recommendations still computed", recipeCount !== "" && !isNaN(Number(recipeCount)));
+
+        w.FridgeRescue.setInventory([{ id: "b1", ingredient_id: "ING_005", expiryDate: "" }]);
+        const hidden = Array.from(d.querySelectorAll("[data-mock-only]")).every(function (n) { return n.hidden; });
+        check("B integration hides mock form and list only", hidden && d.querySelectorAll("[data-mock-only]").length === 2);
+        check("B integration still draws the fridge with carrot", items().length === 1 && box.querySelector(".fv-item").title.indexOf("胡蘿蔔") === 0);
+
+        check("no script errors", errors.length === 0);
+    } catch (e) {
+        check("test crashed: " + e.message, false);
+    }
+
+    document.getElementById("out").textContent = "CHECK " + results.join(" | CHECK ");
+});
+</script></body></html>

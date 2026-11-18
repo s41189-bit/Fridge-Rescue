@@ -84,10 +84,21 @@
 | mystyle.css | 暫時開發版樣式 |
 | myScript.js | 核心功能與互動邏輯 |
 | ingredients.js | 30 種食材主檔 |
-| recipes.js | 五道測試食譜 |
-| images/ | 未來存放正式料理圖片 |
+| recipes.js | 28 道食譜（含份量、參考來源與參考照片連結） |
+| fridgeVisual.js | 可愛冰箱：把庫存食材畫成貼圖放進冰箱 |
+| images/ | 冰箱與 30 種食物貼圖原圖（AI 生成） |
+| images/web/ | 網頁實際使用的縮小版貼圖 |
+| tests/ | 冰箱貼圖的測試與手動檢視頁（執行方式見下方） |
 | README.md | 專案操作說明 |
 | INTEGRATION.md | 團隊整合規格 |
+
+冰箱貼圖測試（不需安裝任何東西，使用 macOS 內建的 JavaScript 與已安裝的 Chrome）：
+
+    osascript -l JavaScript tests/run.js
+
+瀏覽器端檢查頁在 tests/ 資料夾：fridge-visual-demo.html 可手動點選各種情境；
+fridge-visual-anim-check.html 與 page-integration-check.html 以 Chrome 的 --headless=new --dump-dom 執行，
+後者需加 --allow-file-access-from-files。
 
 ## 五、操作方式
 

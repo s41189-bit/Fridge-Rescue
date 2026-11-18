@@ -105,7 +105,7 @@
                         <div class="row g-4">
 
                             <!-- 左半邊：新增食材表單 -->
-                            <div class="col-md-5">
+                            <div class="col-lg-3 col-md-6" data-mock-only>
                                 <div class="p-3 bg-light rounded-3 border">
                                     <h3 class="h5 mb-3">新增冰箱食材</h3>
                                     <form id="mockFridgeForm">
@@ -146,8 +146,13 @@
                                 </div>
                             </div>
 
+                            <!-- 中間：可愛冰箱（庫存食材會以貼圖出現在冰箱裡，由 fridgeVisual.js 繪製） -->
+                            <div class="col-lg-5 col-md-6">
+                                <div id="fridgeVisual"></div>
+                            </div>
+
                             <!-- 右半邊：目前庫存列表 -->
-                            <div class="col-md-7">
+                            <div class="col-lg-4 col-md-12" data-mock-only>
                                 <h3 class="h5 mb-3">目前庫存清單</h3>
                                 <div id="mockFridgeList">
                                     <p class="text-muted">目前沒有食材。</p>
@@ -162,6 +167,7 @@
                     <div class="d-flex flex-wrap justify-content-between text-muted small gap-2">
                         <span>＊庫存與採買清單保存在目前瀏覽器，不會跨裝置同步。</span>
                         <span>＊保存期限燈號僅反映輸入日期，不代表食品安全鑑定。</span>
+                        <span>＊冰箱與食物插圖為 AI 生成。</span>
                     </div>
 
                 </div>
@@ -434,6 +440,9 @@
 
     <!-- 食材主檔 -->
     <script src="ingredients.js"></script>
+
+    <!-- 冰箱貼圖繪製 -->
+    <script src="fridgeVisual.js"></script>
 
     <!-- 測試食譜 -->
     <script src="recipes.js"></script>

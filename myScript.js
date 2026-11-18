@@ -371,6 +371,14 @@
         }).join("") || '<p class="text-muted">目前沒有食材。</p>';
     }
 
+    // 冰箱貼圖：兩種模式（暫用冰箱／B 正式接入）都要畫
+    function renderFridgeVisual() {
+
+        if (!window.FridgeVisual || !$("fridgeVisual")) return;
+
+        FridgeVisual.render($("fridgeVisual"), fridgeItems, { expiryStatus });
+    }
+
     // V1.1 新增：取得目前符合條件的食譜
     // 推薦列表與料理抽籤共同使用此函式
     function currentFilteredRecipes() {
@@ -523,6 +531,7 @@
         }).length;
 
         renderFridge();
+        renderFridgeVisual();
         renderRecipes();
         renderRestock();
     }
@@ -910,7 +919,10 @@
 
             mockMode = false;
             fridgeItems = adaptFridgeItems(items);
-            $("mockFridgePanel").hidden = true;
+            // 只隱藏暫用的表單與清單；冰箱貼圖仍依 B 提供的庫存顯示
+            document.querySelectorAll("[data-mock-only]").forEach(function (node) {
+                node.hidden = true;
+            });
 
             refresh();
         },
