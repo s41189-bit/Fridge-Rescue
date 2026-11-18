@@ -1,10 +1,9 @@
 @charset "UTF-8";
 
 /* ==============================
-   Fridge Rescue 緊湊高效率版面樣式
+   Fridge Rescue 分頁切換清爽版樣式
    ============================== */
 
-/* 基本網頁樣式 */
 body {
     margin: 0;
     padding: 0;
@@ -13,73 +12,84 @@ body {
     color: #333333;
 }
 
-/* 導覽列 */
+/* 導覽列與右上角分頁切換按鈕 (對應課堂 CSS Practice 2 醒目提示目前頁面) */
 .navbar-brand {
     font-size: 20px;
     font-weight: bold;
 }
 
-/* 縮小後的頂部橫幅（左上角顯示標題與統計） */
+.tab-nav-btn {
+    border-radius: 8px;
+    padding: 6px 14px !important;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tab-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.tab-nav-btn.active {
+    background-color: #ffffff !important;
+    color: #198754 !important;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+/* 左上角統計標籤列 */
 .compact-header {
     background-color: #e8f3e9;
 }
 
-/* 主要內容區錨點偏移 */
-section, aside {
-    scroll-margin-top: 65px;
+.status-pill {
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.15s ease;
 }
 
-/* 卡片共用 */
+.status-pill:hover {
+    transform: translateY(-1px);
+}
+
+/* ★ 分頁切換核心：預設隱藏，只有目前點選的分頁 (.active-page) 顯示 */
+.tab-page {
+    display: none;
+}
+
+.tab-page.active-page {
+    display: block;
+    animation: fadeInPage 0.2s ease-in-out;
+}
+
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 卡片樣式 */
 .card {
     border: 1px solid #dddddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .card h2 {
     font-weight: bold;
 }
 
-/* 冰箱庫存捲軸區（避免食材太多時把頁面撐太長） */
-.fridge-scroll-area {
-    max-height: 360px;
-    overflow-y: auto;
-    padding-right: 4px;
-}
-
+/* 冰箱庫存項目 */
 .fridge-item {
-    padding: 10px 0;
-    border-bottom: 1px solid #eeeeee;
-}
-
-.fridge-item:last-child {
-    border-bottom: none;
-}
-
-/* 上方採買清單：改為多欄橫向排列，不佔垂直高度 */
-.shopping-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.shopping-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 6px 12px;
-    background-color: #f8fbf8;
-    border: 1px solid #d4e8d6;
+    padding: 12px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8e2;
     border-radius: 8px;
-    min-width: 180px;
-    flex: 1 1 auto;
-}
-
-/* 已購買食材 */
-.purchased {
-    text-decoration: line-through;
-    color: #999999;
 }
 
 /* 食譜卡片 */
@@ -88,56 +98,68 @@ section, aside {
 }
 
 .recipe-card h3 {
-    font-size: 19px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 .recipe-image {
     width: 100%;
-    height: 170px;
+    height: 190px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 /* 匹配度進度條 */
 .progress {
-    height: 10px;
+    height: 12px;
     background-color: #e9ecef;
 }
 
 /* 已具備及缺少食材 */
 .owned-ingredients {
     color: #198754;
-    font-size: 14px;
-    margin-bottom: 4px;
 }
 
 .missing-ingredients {
     color: #dc3545;
-    font-size: 14px;
-    margin-bottom: 8px;
 }
 
 /* 智慧補貨項目 */
 .restock-item {
-    padding: 10px 12px;
-    margin-bottom: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
     background-color: #f0f7f1;
+    border-left: 4px solid #198754;
     border-radius: 8px;
-    font-size: 14px;
+}
+
+/* 採買清單 */
+.shopping-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 8px;
+    border-bottom: 1px solid #dddddd;
+}
+
+/* 已購買食材 */
+.purchased {
+    text-decoration: line-through;
+    color: #999999;
 }
 
 button {
     cursor: pointer;
 }
 
-/* 手機版響應式調整 */
+/* 手機版基本樣式 */
 @media screen and (max-width: 768px) {
     .recipe-image {
-        height: 150px;
+        height: 160px;
     }
 
     .shopping-item {
-        width: 100%;
+        flex-wrap: wrap;
     }
 }

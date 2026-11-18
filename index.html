@@ -17,10 +17,10 @@
 
 <body>
 
-    <!-- 頂端導覽列 -->
+    <!-- 頂端導覽列：右上角按鈕點擊直接切換分頁 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow-sm py-2">
         <div class="container">
-            <a class="navbar-brand" href="#">Fridge Rescue</a>
+            <a class="navbar-brand" href="#" data-tab-target="fridgeSection">Fridge Rescue</a>
 
             <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
@@ -29,273 +29,303 @@
             </button>
 
             <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto gap-1" id="pageTabNav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#fridgeSection">我的冰箱</a>
+                        <a class="nav-link tab-nav-btn active" href="#fridgeSection" data-tab-target="fridgeSection">
+                            🧊 我的冰箱
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#shoppingSection">採買清單</a>
+                        <a class="nav-link tab-nav-btn" href="#recipeSection" data-tab-target="recipeSection">
+                            🍳 食譜推薦
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#recipeSection">食譜推薦</a>
+                        <a class="nav-link tab-nav-btn" href="#restockSection" data-tab-target="restockSection">
+                            💡 智慧補貨
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#restockSection">智慧補貨</a>
+                        <a class="nav-link tab-nav-btn" href="#shoppingSection" data-tab-target="shoppingSection">
+                            🛒 採買清單
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-   <!-- 左上角只留三個統計標籤 -->
+    <!-- 左上角只留三個統計標籤（點擊標籤也可直接跳到對應分頁） -->
     <header class="compact-header py-2 border-bottom">
         <div class="container">
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge bg-success px-2 py-1">
-                    庫存食材：<span id="inventoryCount">0</span>
-                </span>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-success px-3 py-2 status-pill" data-tab-target="fridgeSection" title="點擊前往我的冰箱">
+                        庫存食材：<span id="inventoryCount">0</span>
+                    </span>
 
-                <span class="badge bg-warning text-dark px-2 py-1">
-                    即期食材：<span id="expiringCount">0</span>
-                </span>
+                    <span class="badge bg-warning text-dark px-3 py-2 status-pill" data-tab-target="fridgeSection" title="點擊前往我的冰箱">
+                        即期食材：<span id="expiringCount">0</span>
+                    </span>
 
-                <span class="badge bg-primary px-2 py-1">
-                    零採買料理：<span id="availableRecipeCount">0</span>
-                </span>
+                    <span class="badge bg-primary px-3 py-2 status-pill" data-tab-target="recipeSection" title="點擊前往食譜推薦">
+                        零採買料理：<span id="availableRecipeCount">0</span>
+                    </span>
+                </div>
+
+                <!-- 目前所在分頁小提示 -->
+                <small class="text-muted d-none d-md-inline" id="currentTabHint">
+                    目前分頁：我的冰箱
+                </small>
             </div>
         </div>
     </header>
 
-    <!-- 網站主要內容 -->
-    <main class="container py-3">
+    <!-- 網站主要內容（每次只顯示一個分頁，寬敞不擁擠！） -->
+    <main class="container py-4">
 
         <div id="appMessage" role="status" aria-live="polite"></div>
 
-        <div class="row g-3">
+        <!-- ==================== 分頁 1：我的冰箱 ==================== -->
+        <section id="fridgeSection" class="tab-page active-page">
+            <div class="card">
+                <div class="card-body p-4">
 
-            <!-- 左欄（佔 4 等份）：我的冰箱 ＋ 智慧補貨 -->
-            <aside class="col-lg-4" id="fridgeSection">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <h2 class="h4 mb-1">🧊 我的冰箱</h2>
+                            <p class="text-muted small mb-0">新增目前擁有的食材與到期日，完成後可點選右上方「食譜推薦」查看料理。</p>
+                        </div>
+                        <button type="button" class="btn btn-outline-success btn-sm" data-tab-target="recipeSection">
+                            選好食材了？前往食譜推薦 ➔
+                        </button>
+                    </div>
 
-                <!-- 1. 我的冰箱卡片 -->
-                <div class="card mb-3">
-                    <div class="card-body">
+                    <div id="mockFridgePanel">
+                        <div class="row g-4">
 
-                        <h2 class="h5 mb-3">🧊 我的冰箱</h2>
+                            <!-- 左半邊：新增食材表單 -->
+                            <div class="col-md-5">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <h3 class="h5 mb-3">新增冰箱食材</h3>
+                                    <form id="mockFridgeForm">
 
-                        <div id="mockFridgePanel">
+                                        <div class="mb-3">
+                                            <label for="ingredientSelect" class="form-label fw-bold">
+                                                選擇食材
+                                            </label>
+                                            <select id="ingredientSelect" class="form-select" required>
+                                                <option value="">請選擇食材</option>
+                                            </select>
+                                        </div>
 
-                            <form id="mockFridgeForm">
+                                        <div class="mb-3">
+                                            <label for="expiryDate" class="form-label fw-bold">
+                                                到期日期
+                                            </label>
+                                            <input type="date" id="expiryDate" class="form-control">
+                                            <small class="text-muted d-block mt-1">
+                                                未設定日期也可以參與配對。
+                                            </small>
+                                        </div>
 
-                                <div class="mb-2">
-                                    <label for="ingredientSelect" class="form-label small fw-bold mb-1">
-                                        選擇食材
-                                    </label>
+                                        <button type="submit" class="btn btn-success w-100">
+                                            ＋ 新增食材
+                                        </button>
 
-                                    <select id="ingredientSelect"
-                                        class="form-select form-select-sm" required>
-                                        <option value="">請選擇食材</option>
-                                    </select>
-                                </div>
+                                    </form>
 
-                                <div class="mb-2">
-                                    <label for="expiryDate" class="form-label small fw-bold mb-1">
-                                        到期日期
-                                    </label>
-
-                                    <input type="date" id="expiryDate"
-                                        class="form-control form-control-sm">
-
-                                    <small class="text-muted" style="font-size: 12px;">
-                                        未設定日期也可以參與配對。
-                                    </small>
-                                </div>
-
-                                <button type="submit"
-                                    class="btn btn-success btn-sm w-100 mt-1">
-                                    ＋ 新增食材
-                                </button>
-
-                            </form>
-
-                            <hr class="my-3">
-
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h3 class="h6 mb-0 fw-bold">目前庫存</h3>
-                                <div class="d-flex gap-1">
-                                    <button type="button" id="loadDemoBtn"
-                                        class="btn btn-outline-success btn-sm py-0 px-2" style="font-size: 12px;">
-                                        載入示範
-                                    </button>
-                                    <button type="button" id="clearFridgeBtn"
-                                        class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 12px;">
-                                        清空
-                                    </button>
+                                    <div class="d-flex flex-wrap gap-2 mt-3 pt-3 border-top">
+                                        <button type="button" id="loadDemoBtn" class="btn btn-outline-success btn-sm">
+                                            載入示範資料
+                                        </button>
+                                        <button type="button" id="clearFridgeBtn" class="btn btn-outline-danger btn-sm">
+                                            清空冰箱
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div id="mockFridgeList" class="fridge-scroll-area">
-                                <p class="text-muted small mb-0">目前沒有食材。</p>
+                            <!-- 右半邊：目前庫存列表 -->
+                            <div class="col-md-7">
+                                <h3 class="h5 mb-3">目前庫存清單</h3>
+                                <div id="mockFridgeList">
+                                    <p class="text-muted">目前沒有食材。</p>
+                                </div>
                             </div>
 
                         </div>
-
-                        <small class="text-muted d-block mt-2" style="font-size: 12px;">
-                            ＊保存期限燈號僅反映輸入日期，不代表食品安全鑑定。
-                        </small>
-
                     </div>
-                </div>
 
-                <!-- 2. 智慧補貨推薦（移至左欄下方，方便對照） -->
-                <div class="card" id="restockSection">
-                    <div class="card-body">
-                        <h2 class="h5 mb-1">💡 智慧補貨推薦</h2>
-                        <p class="text-muted small mb-2">
-                            只多買一樣食材，就能解鎖更多料理。
-                        </p>
-                        <div id="restockList"></div>
+                    <hr class="my-4">
+
+                    <div class="d-flex flex-wrap justify-content-between text-muted small gap-2">
+                        <span>＊庫存與採買清單保存在目前瀏覽器，不會跨裝置同步。</span>
+                        <span>＊保存期限燈號僅反映輸入日期，不代表食品安全鑑定。</span>
                     </div>
+
                 </div>
+            </div>
+        </section>
 
-            </aside>
+        <!-- ==================== 分頁 2：智慧食譜推薦 ==================== -->
+        <section id="recipeSection" class="tab-page">
 
-            <!-- 右欄（佔 8 等份）：最上方直接放「採買清單」與「篩選/抽籤」，接著顯示「食譜推薦」 -->
-            <section class="col-lg-8" id="recipeSection">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h2 class="h4 mb-1">🍳 智慧食譜推薦</h2>
+                    <p class="text-muted small mb-0">依據您冰箱現有食材自動計算匹配度，並優先推薦能消耗即期食材的料理。</p>
+                </div>
+                <button type="button" class="btn btn-outline-success btn-sm" data-tab-target="shoppingSection">
+                    🛒 查看我的採買清單 ➔
+                </button>
+            </div>
 
-                <!-- ★ 移到最上方：我的採買清單（選完食譜不用往下滑，直接在上方看到！） -->
-                <div class="card mb-3 border-success" id="shoppingSection">
-                    <div class="card-body py-3">
+            <!-- 篩選條件與抽籤機 -->
+            <div class="card mb-4">
+                <div class="card-body">
 
-                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <h2 class="h5 mb-0 text-success">🛒 我的採買清單</h2>
-                                <span class="badge bg-secondary">
-                                    已購買 <span id="purchasedCount">0</span> / <span id="shoppingCount">0</span> 項
-                                </span>
-                            </div>
+                    <div class="row g-3">
 
-                            <div class="d-flex gap-2">
-                                <button type="button" id="copyShoppingBtn"
-                                    class="btn btn-success btn-sm">
-                                    複製採買清單
-                                </button>
-                                <button type="button" id="clearShoppingBtn"
-                                    class="btn btn-outline-danger btn-sm">
-                                    清空清單
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- JavaScript 動態產生採買清單（改為橫向緊湊排列） -->
-                        <div id="shoppingList" class="shopping-grid"></div>
-
-                        <!-- 複製功能的備援文字區 -->
-                        <div id="copyFallback" class="mt-2" hidden>
-                            <label for="shoppingCopyText" class="form-label small">
-                                請手動複製以下文字：
+                        <div class="col-md-4">
+                            <label for="timeFilter" class="form-label fw-bold">
+                                料理時間
                             </label>
-                            <textarea id="shoppingCopyText"
-                                class="form-control form-control-sm"
-                                rows="3" readonly></textarea>
+                            <select id="timeFilter" class="form-select">
+                                <option value="all">不限時間</option>
+                                <option value="10">10 分鐘以內</option>
+                                <option value="20">20 分鐘以內</option>
+                                <option value="30">30 分鐘以內</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="difficultyFilter" class="form-label fw-bold">
+                                料理難度
+                            </label>
+                            <select id="difficultyFilter" class="form-select">
+                                <option value="all">不限難度</option>
+                                <option value="簡單">簡單</option>
+                                <option value="中等">中等</option>
+                                <option value="困難">困難</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="dietFilter" class="form-label fw-bold">
+                                飲食偏好
+                            </label>
+                            <select id="dietFilter" class="form-select">
+                                <option value="all">不限偏好</option>
+                                <option value="蛋奶素">蛋奶素</option>
+                                <option value="無肉">無肉</option>
+                                <option value="無乳製品">無乳製品</option>
+                            </select>
                         </div>
 
                     </div>
-                </div>
 
-                <!-- 篩選條件 ＋ 今天吃什麼抽籤機（合併成緊湊工具列） -->
-                <div class="card mb-3">
-                    <div class="card-body py-3">
-
-                        <div class="row g-2 align-items-end">
-
-                            <div class="col-sm-4">
-                                <label for="timeFilter" class="form-label small fw-bold mb-1">
-                                    料理時間
-                                </label>
-                                <select id="timeFilter" class="form-select form-select-sm">
-                                    <option value="all">不限時間</option>
-                                    <option value="10">10 分鐘以內</option>
-                                    <option value="20">20 分鐘以內</option>
-                                    <option value="30">30 分鐘以內</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <label for="difficultyFilter" class="form-label small fw-bold mb-1">
-                                    料理難度
-                                </label>
-                                <select id="difficultyFilter" class="form-select form-select-sm">
-                                    <option value="all">不限難度</option>
-                                    <option value="簡單">簡單</option>
-                                    <option value="中等">中等</option>
-                                    <option value="困難">困難</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <label for="dietFilter" class="form-label small fw-bold mb-1">
-                                    飲食偏好
-                                </label>
-                                <select id="dietFilter" class="form-select form-select-sm">
-                                    <option value="all">不限偏好</option>
-                                    <option value="蛋奶素">蛋奶素</option>
-                                    <option value="無肉">無肉</option>
-                                    <option value="無乳製品">無乳製品</option>
-                                </select>
-                            </div>
-
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-3 pt-3 border-top">
+                        <!-- 零採買模式 -->
+                        <div class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input" id="zeroShopping">
+                            <label class="form-check-label" for="zeroShopping">
+                                零採買模式（只顯示食材全齊的料理）
+                            </label>
                         </div>
 
-                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 pt-2 border-top">
-                            <!-- 零採買模式 -->
-                            <div class="form-check form-switch mb-0">
-                                <input type="checkbox"
-                                    class="form-check-input"
-                                    id="zeroShopping">
-                                <label class="form-check-label small"
-                                    for="zeroShopping">
-                                    零採買模式（只顯示食材全齊）
-                                </label>
-                            </div>
-
-                            <!-- 料理抽籤機按鈕與重設篩選並排 -->
-                            <div class="d-flex flex-wrap gap-2 align-items-center">
-                                <button type="button" id="randomRecipeBtn"
-                                    class="btn btn-warning btn-sm fw-bold">
-                                    🎲 今天吃什麼？（抽一道料理）
-                                </button>
-
-                                <button type="button" id="resetFiltersBtn"
-                                    class="btn btn-outline-secondary btn-sm">
-                                    重設篩選
-                                </button>
-                            </div>
+                        <!-- 料理抽籤與重設按鈕 -->
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" id="randomRecipeBtn" class="btn btn-warning fw-bold">
+                                🎲 今天吃什麼？（幫我抽一道料理）
+                            </button>
+                            <button type="button" id="resetFiltersBtn" class="btn btn-outline-secondary">
+                                重設篩選
+                            </button>
                         </div>
-
-                        <div id="randomRecipeMessage" class="small text-danger mt-1"
-                            role="status" aria-live="polite"></div>
-
                     </div>
+
+                    <div id="randomRecipeMessage" class="mt-2 text-danger" role="status" aria-live="polite"></div>
+
                 </div>
+            </div>
 
-                <!-- 食譜列表標題列 -->
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h2 class="h5 mb-0">🍳 智慧食譜推薦</h2>
-                    <span class="text-muted small">
-                        符合條件的料理：<strong><span id="recipeCount">0</span></strong> 道
-                    </span>
+            <p class="text-muted">
+                符合條件的料理：<strong><span id="recipeCount">0</span></strong> 道
+            </p>
+
+            <!-- JavaScript 動態產生食譜卡片（全寬度下可舒適排列） -->
+            <div id="recipeList" class="row g-4"></div>
+
+        </section>
+
+        <!-- ==================== 分頁 3：智慧補貨推薦 ==================== -->
+        <section id="restockSection" class="tab-page">
+            <div class="card">
+                <div class="card-body p-4">
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <h2 class="h4 mb-1">💡 智慧補貨推薦</h2>
+                            <p class="text-muted small mb-0">只多買一樣食材，就能解鎖更多料理。</p>
+                        </div>
+                        <button type="button" class="btn btn-outline-success btn-sm" data-tab-target="recipeSection">
+                            ← 返回食譜推薦
+                        </button>
+                    </div>
+
+                    <!-- JavaScript 動態產生推薦結果 -->
+                    <div id="restockList"></div>
+
                 </div>
+            </div>
+        </section>
 
-                <!-- JavaScript 動態產生食譜卡片 -->
-                <div id="recipeList" class="row g-3"></div>
+        <!-- ==================== 分頁 4：我的採買清單 ==================== -->
+        <section id="shoppingSection" class="tab-page">
+            <div class="card">
+                <div class="card-body p-4">
 
-            </section>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-3">
+                            <h2 class="h4 mb-0">🛒 我的採買清單</h2>
+                            <span class="badge bg-secondary fs-6">
+                                已購買 <span id="purchasedCount">0</span> / <span id="shoppingCount">0</span> 項
+                            </span>
+                        </div>
 
-        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" id="copyShoppingBtn" class="btn btn-success btn-sm">
+                                複製採買清單
+                            </button>
+                            <button type="button" id="clearShoppingBtn" class="btn btn-outline-danger btn-sm">
+                                清空清單
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-3">
+                        💡 提示：將清單中的食材「打勾」標記為已購買時，會跳出快捷視窗讓您直接加入「我的冰箱」！
+                    </p>
+
+                    <!-- JavaScript 動態產生採買清單 -->
+                    <div id="shoppingList"></div>
+
+                    <!-- 複製功能的備援文字區 -->
+                    <div id="copyFallback" class="mt-3" hidden>
+                        <label for="shoppingCopyText" class="form-label">
+                            請手動複製以下文字：
+                        </label>
+                        <textarea id="shoppingCopyText" class="form-control" rows="5" readonly></textarea>
+                    </div>
+
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <!-- Bootstrap Modal：食譜詳情 -->
+    <!-- Bootstrap Modal 1：食譜詳情 -->
     <div class="modal fade" id="recipeModal" tabindex="-1"
         aria-labelledby="recipeModalTitle" aria-hidden="true">
 
@@ -338,11 +368,63 @@
 
     </div>
 
+    <!-- Bootstrap Modal 2：採買清單打勾後「快捷加入冰箱」視窗 -->
+    <div class="modal fade" id="quickAddFridgeModal" tabindex="-1"
+        aria-labelledby="quickAddTitle" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content border-success">
+
+                <div class="modal-header bg-success text-white py-2">
+                    <h2 class="modal-title h6 mb-0" id="quickAddTitle">
+                        ⚡ 剛買好食材嗎？一鍵放入我的冰箱！
+                    </h2>
+                    <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+
+                <form id="quickAddFridgeForm">
+                    <div class="modal-body">
+
+                        <input type="hidden" id="quickAddIngredientId">
+
+                        <p class="mb-3 small">
+                            您剛勾選了「<strong id="quickAddIngredientName" class="text-success">食材</strong>」，是否直接將它新增到冰箱庫存？
+                        </p>
+
+                        <div class="mb-2">
+                            <label for="quickAddExpiry" class="form-label small fw-bold mb-1">
+                                到期日期（已預填建議保存天數，可修改或留空）
+                            </label>
+                            <input type="date" id="quickAddExpiry" class="form-control form-control-sm">
+                            <small id="quickAddSuggestText" class="text-muted" style="font-size: 12px;"></small>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer py-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                            data-bs-dismiss="modal">
+                            暫不放入
+                        </button>
+                        <button type="submit" class="btn btn-success btn-sm fw-bold">
+                            ＋ 立即放入冰箱
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- 網站頁尾 -->
-    <footer class="bg-dark text-white text-center py-3 mt-4">
+    <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-1 small">Fridge Rescue｜網站企劃課程專案</p>
         <small class="text-white-50" style="font-size: 12px;">
-            庫存與採買清單保存在目前瀏覽器 (localStorage)
+            V1.1 開發版・庫存與採買清單保存在目前瀏覽器
         </small>
     </footer>
 
@@ -357,6 +439,118 @@
 
     <!-- 主要功能程式 -->
     <script src="myScript.js"></script>
+
+    <!-- 分頁切換與採買快捷入庫腳本（完全不修改 myScript.js） -->
+    <script>
+    (function () {
+        const tabNames = {
+            fridgeSection: "我的冰箱",
+            recipeSection: "食譜推薦",
+            restockSection: "智慧補貨",
+            shoppingSection: "採買清單"
+        };
+
+        // 切換分頁函式
+        function switchTab(targetId) {
+            if (!tabNames[targetId]) return;
+
+            // 1. 切換四大區塊顯示/隱藏
+            document.querySelectorAll(".tab-page").forEach(function (sec) {
+                sec.classList.toggle("active-page", sec.id === targetId);
+            });
+
+            // 2. 更新右上角導覽列按鈕的 active 醒目狀態
+            document.querySelectorAll("#pageTabNav .tab-nav-btn").forEach(function (link) {
+                link.classList.toggle("active", link.dataset.tabTarget === targetId);
+            });
+
+            // 3. 更新右上角目前分頁提示文字
+            const hint = document.getElementById("currentTabHint");
+            if (hint) {
+                hint.textContent = "目前分頁：" + tabNames[targetId];
+            }
+
+            // 4. 在手機版點選後自動收起漢堡選單
+            const navCollapse = document.getElementById("mainNavbar");
+            if (navCollapse && navCollapse.classList.contains("show") && window.bootstrap) {
+                bootstrap.Collapse.getOrCreateInstance(navCollapse).hide();
+            }
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // 監聽所有帶有 data-tab-target 的按鈕或連結
+        document.addEventListener("click", function (e) {
+            const trigger = e.target.closest("[data-tab-target]");
+            if (!trigger) return;
+            e.preventDefault();
+            switchTab(trigger.dataset.tabTarget);
+        });
+
+        // 採買清單打勾連動「快捷放入冰箱」視窗
+        const SHOP_KEY = "fridgeRescue_A_shopping_v1";
+        const shoppingListEl = document.getElementById("shoppingList");
+        const quickForm = document.getElementById("quickAddFridgeForm");
+
+        function addDaysStr(days) {
+            const d = new Date();
+            d.setDate(d.getDate() + Number(days));
+            return d.getFullYear() + "-" +
+                String(d.getMonth() + 1).padStart(2, "0") + "-" +
+                String(d.getDate()).padStart(2, "0");
+        }
+
+        if (shoppingListEl) {
+            shoppingListEl.addEventListener("change", function (e) {
+                if (e.target.dataset.check !== undefined && e.target.checked) {
+                    try {
+                        const list = JSON.parse(localStorage.getItem(SHOP_KEY)) || [];
+                        const item = list[Number(e.target.dataset.check)];
+                        if (!item) return;
+
+                        const master = ingredients.find(function (i) {
+                            return i.ingredient_id === item.ingredient_id;
+                        });
+                        if (!master) return;
+
+                        document.getElementById("quickAddIngredientId").value = master.ingredient_id;
+                        document.getElementById("quickAddIngredientName").textContent = master.ingredient_name;
+                        document.getElementById("quickAddExpiry").value = addDaysStr(master.suggested_days);
+                        document.getElementById("quickAddSuggestText").textContent =
+                            "🌱 建議冷藏保存約 " + master.suggested_days + " 天";
+
+                        if (window.bootstrap && bootstrap.Modal) {
+                            bootstrap.Modal.getOrCreateInstance(
+                                document.getElementById("quickAddFridgeModal")
+                            ).show();
+                        }
+                    } catch (err) {}
+                }
+            });
+        }
+
+        if (quickForm) {
+            quickForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const ingSelect = document.getElementById("ingredientSelect");
+                const expInput = document.getElementById("expiryDate");
+                const fridgeForm = document.getElementById("mockFridgeForm");
+
+                if (ingSelect && expInput && fridgeForm) {
+                    ingSelect.value = document.getElementById("quickAddIngredientId").value;
+                    expInput.value = document.getElementById("quickAddExpiry").value;
+                    fridgeForm.requestSubmit();
+                }
+
+                if (window.bootstrap && bootstrap.Modal) {
+                    bootstrap.Modal.getOrCreateInstance(
+                        document.getElementById("quickAddFridgeModal")
+                    ).hide();
+                }
+            });
+        }
+    }());
+    </script>
 
 </body>
 
