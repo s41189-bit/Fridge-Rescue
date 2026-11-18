@@ -61,6 +61,10 @@ const recipes = [
             url: "https://smart.businessweekly.com.tw/Channel/IndepArticle.aspx?id=29482",
             type: "synced"
         },
+        photoLink: {
+            title: "Unsplash｜黑盤歐姆蛋",
+            url: "https://unsplash.com/photos/omelette-on-black-plate-6rtm6a_aVyE"
+        },
         image: ""
     },
     {
@@ -83,6 +87,10 @@ const recipes = [
             url: "https://icook.tw/recipes/327975",
             type: "synced"
         },
+        photoLink: {
+            title: "Pexels｜中式炒飯照片",
+            url: "https://www.pexels.com/search/chinese%20fried%20rice/"
+        },
         image: ""
     },
     {
@@ -103,6 +111,10 @@ const recipes = [
             title: "vocus｜洋蔥炒蛋",
             url: "https://vocus.cc/article/685b7b37fd89780001f03e1f",
             type: "synced"
+        },
+        photoLink: {
+            title: "Pexels｜炒蛋照片",
+            url: "https://www.pexels.com/photo/scrambled-eggs-with-various-spices-6109498/"
         },
         image: ""
     },
@@ -125,6 +137,10 @@ const recipes = [
             url: "https://icook.tw/search/%E8%B5%B7%E5%8F%B8%E5%9C%9F%E5%8F%B8/",
             type: "reference"
         },
+        photoLink: {
+            title: "Pexels｜烤起司吐司",
+            url: "https://www.pexels.com/photo/grilled-cheese-on-a-plate-14941252/"
+        },
         image: ""
     },
     {
@@ -145,6 +161,10 @@ const recipes = [
             title: "Cookpad 搜尋｜法式吐司（步驟為小組版本）",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E6%B3%95%E5%BC%8F%E5%90%90%E5%8F%B8",
             type: "reference"
+        },
+        photoLink: {
+            title: "Pexels｜法式吐司",
+            url: "https://www.pexels.com/photo/a-plate-of-french-toast-4623075/"
         },
         image: ""
     },
@@ -167,6 +187,10 @@ const recipes = [
             url: "https://icook.tw/recipes/442617",
             type: "synced"
         },
+        photoLink: {
+            title: "Pixabay｜炒高麗菜照片",
+            url: "https://pixabay.com/photos/cabbage-fry-fish-sauce-1624756/"
+        },
         image: ""
     },
     {
@@ -187,6 +211,10 @@ const recipes = [
             title: "愛料理｜蒜炒青江菜 by Kalu Tsai",
             url: "https://icook.tw/recipes/343604",
             type: "synced"
+        },
+        photoLink: {
+            title: "Pexels｜炒青菜照片",
+            url: "https://www.pexels.com/search/stir-fried%20vegetables/"
         },
         image: ""
     },
@@ -209,6 +237,10 @@ const recipes = [
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E8%92%9C%E7%82%92%E8%8A%B1%E6%A4%B0%E8%8F%9C%E7%8E%89%E7%B1%B3%E7%AD%8D",
             type: "reference"
         },
+        photoLink: {
+            title: "Pexels｜花椰菜與玉米筍",
+            url: "https://www.pexels.com/photo/cooked-broccoli-soup-53821/"
+        },
         image: ""
     },
     {
@@ -229,6 +261,10 @@ const recipes = [
             title: "愛料理搜尋｜涼拌小黃瓜（步驟為小組版本）",
             url: "https://icook.tw/search/%E6%B6%BC%E6%8B%8C%E5%B0%8F%E9%BB%83%E7%93%9C/",
             type: "reference"
+        },
+        photoLink: {
+            title: "Unsplash｜涼拌黃瓜照片",
+            url: "https://unsplash.com/s/photos/cucumber-salad"
         },
         image: ""
     },
@@ -251,6 +287,10 @@ const recipes = [
             url: "https://cookidoo.international/recipes/recipe/en/r62726",
             type: "reference"
         },
+        photoLink: {
+            title: "Pexels｜炒青菜照片",
+            url: "https://www.pexels.com/search/stir-fried%20vegetables/"
+        },
         image: ""
     },
     {
@@ -271,6 +311,10 @@ const recipes = [
             title: "Daydaycook｜Scallion Potato Egg Pancake（來源另加麵粉，步驟為小組版本）",
             url: "https://www.daydaycook.com/en/recipe/scallion-potato-egg-pancake",
             type: "reference"
+        },
+        photoLink: {
+            title: "Pexels｜馬鈴薯煎餅",
+            url: "https://www.pexels.com/photo/potato-pancakes-served-on-plate-24870672/"
         },
         image: ""
     },
@@ -293,6 +337,10 @@ const recipes = [
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E7%87%89%E9%A6%AC%E9%88%B4%E8%96%AF%E7%B4%85%E8%98%BF%E8%94%94",
             type: "reference"
         },
+        photoLink: {
+            title: "Unsplash｜馬鈴薯胡蘿蔔燉菜",
+            url: "https://unsplash.com/photos/a-bowl-of-stew-with-potatoes-carrots-and-meat-WgrOML7JhSU"
+        },
         image: ""
     },
     {
@@ -313,6 +361,10 @@ const recipes = [
             title: "星島健康｜番茄豆腐湯（劉博仁醫師食譜）",
             url: "https://www.stheadline.com/health-care/3501715/",
             type: "synced"
+        },
+        photoLink: {
+            title: "Unsplash｜豆腐番茄湯",
+            url: "https://unsplash.com/photos/noodle-soup-with-tofu-tomatoes-and-fresh-herbs-yc-DMKDJIFw"
         },
         image: ""
     },
@@ -359,6 +411,10 @@ const recipes = [
             title: "vocus｜淡口版麻婆豆腐",
             url: "https://vocus.cc/article/6481933bfd897800015e63fe",
             type: "synced"
+        },
+        photoLink: {
+            title: "Pixabay｜麻婆豆腐",
+            url: "https://pixabay.com/photos/mapo-tofu-green-onion-sauce-4985990/"
         },
         image: ""
     },
@@ -408,6 +464,10 @@ const recipes = [
             url: "https://icook.tw/search/%E9%9B%9E%E8%83%B8%E8%82%89%E7%82%92%E8%8A%B1%E6%A4%B0%E8%8F%9C/",
             type: "reference"
         },
+        photoLink: {
+            title: "Pexels｜雞肉炒花椰菜",
+            url: "https://www.pexels.com/photo/white-rice-chicken-and-broccoli-on-black-non-stick-pan-105588/"
+        },
         image: ""
     },
     {
@@ -428,6 +488,10 @@ const recipes = [
             title: "YouTube｜蔥爆豬肉 家常快炒（步驟為小組版本）",
             url: "https://www.youtube.com/watch?v=dcl4r6Z8erI",
             type: "reference"
+        },
+        photoLink: {
+            title: "Pexels｜炒豬肉照片",
+            url: "https://www.pexels.com/search/stir-fry/"
         },
         image: ""
     },
@@ -475,6 +539,10 @@ const recipes = [
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E6%B4%8B%E8%94%A5%E7%82%92%E7%89%9B%E8%82%89",
             type: "reference"
         },
+        photoLink: {
+            title: "Pexels｜牛肉炒洋蔥照片",
+            url: "https://www.pexels.com/search/beef%20stir%20fry/"
+        },
         image: ""
     },
     {
@@ -495,6 +563,10 @@ const recipes = [
             title: "愛料理搜尋｜蝦仁炒蛋（步驟為小組版本）",
             url: "https://icook.tw/search/%E8%9D%A6%E4%BB%81%E7%82%92%E8%9B%8B/",
             type: "reference"
+        },
+        photoLink: {
+            title: "Pexels｜炒蛋照片",
+            url: "https://www.pexels.com/search/scramble%20egg/"
         },
         image: ""
     },
@@ -517,6 +589,10 @@ const recipes = [
             url: "https://omnivorescookbook.com/salmon-with-ginger-soy-sauce/",
             type: "synced"
         },
+        photoLink: {
+            title: "Pexels｜香煎鮭魚",
+            url: "https://www.pexels.com/photo/golden-pan-seared-salmon-steak-close-up-31609761/"
+        },
         image: ""
     },
     {
@@ -537,6 +613,10 @@ const recipes = [
             title: "Cookpad 搜尋｜奶油義大利麵（步驟為小組版本）",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E5%A5%B6%E6%B2%B9%E7%BE%A9%E5%A4%A7%E5%88%A9%E9%BA%B5",
             type: "reference"
+        },
+        photoLink: {
+            title: "Unsplash｜培根奶油義大利麵",
+            url: "https://unsplash.com/photos/a-plate-of-pasta-with-bacon-on-it-bYSvpF8NBmE"
         },
         image: ""
     },
@@ -585,6 +665,10 @@ const recipes = [
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E8%82%89%E6%9C%AB%E8%B1%86%E8%85%90%E8%92%B8",
             type: "reference"
         },
+        photoLink: {
+            title: "Pexels｜豆腐照片",
+            url: "https://www.pexels.com/search/tofu/"
+        },
         image: ""
     },
     {
@@ -606,6 +690,10 @@ const recipes = [
             url: "https://lazymomcookbook.blogspot.com/2017/07/how-to-fry-udon-noodles.html",
             type: "synced"
         },
+        photoLink: {
+            title: "Pexels｜豬肉炒烏龍麵",
+            url: "https://www.pexels.com/photo/pasta-dish-724291/"
+        },
         image: ""
     },
     {
@@ -626,6 +714,10 @@ const recipes = [
             title: "Cookidoo｜番茄肉醬義大利麵（僅食材與時間，步驟需登入）",
             url: "https://cookidoo.com.au/recipes/recipe/en-AU/r795168",
             type: "reference"
+        },
+        photoLink: {
+            title: "Pixabay｜肉醬義大利麵",
+            url: "https://pixabay.com/photos/spaghetti-bolognese-meat-sauce-food-3176060/"
         },
         image: ""
     }
