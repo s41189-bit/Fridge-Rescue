@@ -201,7 +201,21 @@
             ? number
             : null;
     }
+    
+    // 驗證新輸入：只允許正數，最多一位小數
+    function validInputQuantity(value) {
+        const number = validQuantity(value);
 
+        if (number === null) {
+            return null;
+        }
+
+        return Math.abs(
+            number * 10 - Math.round(number * 10)
+        ) < 1e-9
+            ? number
+            : null;
+    }
     function ingredientUnit(id) {
         const item = ingredientById(id);
 
@@ -211,7 +225,7 @@
     }
 
     function displayQuantity(item) {
-        const quantity = validQuantity(item.quantity);
+        const quantity = validInputQuantity(item.quantity);
 
         if (quantity === null) {
             return "數量未設定";
@@ -1001,7 +1015,7 @@
                                 class="form-control form-control-sm"
                                 data-use-index="${index}"
                                 min="0"
-                                step="any"
+                                step="0.1"
                                 value="0"
                                 ${usable
                                     ? `max="${quantity}"`
@@ -1107,22 +1121,24 @@
             const raw =
                 input.value.trim();
 
-            const amount =
-                Number(raw);
-
+           
+            const amount = raw === "0"
+                ? 0
+                : validInputQuantity(raw);
+            
             if (
                 !row ||
-                raw === "" ||
-                !Number.isFinite(amount) ||
-                amount < 0
+                amount === null ||
+                !Number.isFinite(amount)
             ) {
                 cookingMessage(
-                    "請輸入有效且不小於 0 的使用數量。",
+                    "請輸入不小於 0、最多一位小數的使用數量。",
                     "danger"
                 );
 
                 return;
             }
+
 
             if (
                 !result.recipe.requiredIngredients.includes(
@@ -1419,14 +1435,14 @@
                 ) {
                     return;
                 }
-
-                const quantity = validQuantity(
+                
+                const quantity = validInputQuantity(
                     $("ingredientQuantity").value.trim()
                 );
 
                 if (quantity === null) {
                     message(
-                        "請輸入大於 0 的有效食材數量。",
+                        "請輸入大於 0、最多一位小數的食材數量。",
                         "warning"
                     );
 
