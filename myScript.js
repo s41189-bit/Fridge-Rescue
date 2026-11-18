@@ -40,6 +40,13 @@
         return `<p class="mb-2">${label}：<a href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(source.title || source.url)}</a></p>`;
     }
 
+    // 參考照片：只附連結，不在網站內放圖（照片版權屬原作者）
+    function photoLinkHTML(photoLink) {
+        if (!photoLink || !/^https?:\/\//i.test(photoLink.url || "")) return "";
+
+        return `<p class="mb-2">參考照片：<a href="${escapeHTML(photoLink.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(photoLink.title || photoLink.url)}</a></p>`;
+    }
+
     function escapeHTML(value) {
         return String(value == null ? "" : value).replace(/[&<>"']/g, function (c) {
             return {
@@ -572,6 +579,7 @@
             </ol>
 
             ${sourceHTML(recipe.source)}
+            ${photoLinkHTML(recipe.photoLink)}
 
             <small class="text-muted d-block">
                 食譜為小組整理，部分步驟參考公開來源；份量、常備調味料及食材安全請自行確認。

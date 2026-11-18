@@ -7,6 +7,7 @@
 // - 調味料（鹽、油、醬油、胡椒、糖等）不列入必要食材，只寫在步驟中。
 // - dietTags 依食材推算：全素、蛋奶素、無肉、無乳製品。
 // - image 暫時留空（images/ 資料夾尚無圖片）。
+// - photoLink：「參考照片」連結。照片版權屬原作者，網站不放圖，只附連結讓使用者到原頁面看。
 // - REC_003（番茄起司烘蛋）與 REC_028（蛋花烏龍湯麵）已刪除，編號保留不補。
 // - portions 為顯示用份量，與配對用的 requiredIngredients 分開。
 // - source：參考來源。type 為 "synced" 表示步驟已依該來源改寫；
@@ -29,6 +30,15 @@ const recipes = [
             "同一鍋放入番茄，炒至出汁變軟。",
             "倒回炒蛋拌炒均勻，依口味調味後即可起鍋。"
         ],
+        source: {
+            title: "愛料理｜番茄炒蛋 by 愛亂煮小娟（步驟為小組版本）",
+            url: "https://icook.tw/recipes/400933",
+            type: "reference"
+        },
+        photoLink: {
+            title: "Cherry & Dennis｜番茄炒蛋",
+            url: "https://goldendennis.com/recipe-tomato-scrambled-eggs.html"
+        },
         image: ""
     },
     {
@@ -66,6 +76,11 @@ const recipes = [
             "炒到飯粒分明、有鍋氣後，加鹽與少許醬油調味。",
             "起鍋前撒上蔥花拌勻即可。"
         ],
+        source: {
+            title: "愛料理｜蔥油蛋炒飯 by 新手人妻日常（步驟為小組版本）",
+            url: "https://icook.tw/recipes/327975",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -103,6 +118,11 @@ const recipes = [
             "兩面各煎約 1–2 分鐘，至金黃酥脆、起司融化。",
             "對切後趁熱享用。"
         ],
+        source: {
+            title: "愛料理搜尋｜起司吐司（步驟為小組版本）",
+            url: "https://icook.tw/search/%E8%B5%B7%E5%8F%B8%E5%9C%9F%E5%8F%B8/",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -119,6 +139,11 @@ const recipes = [
             "平底鍋抹薄油，小火煎至兩面金黃。",
             "切塊盛盤，可依喜好淋上蜂蜜或糖粉。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜法式吐司（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E6%B3%95%E5%BC%8F%E5%90%90%E5%8F%B8",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -135,6 +160,11 @@ const recipes = [
             "放入高麗菜大火快炒，淋少許水燜 1 分鐘。",
             "加鹽調味，炒至菜葉變軟即可。"
         ],
+        source: {
+            title: "愛料理｜蒜炒高麗菜 by Amy's Kitchen（步驟為小組版本）",
+            url: "https://icook.tw/recipes/442617",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -151,6 +181,11 @@ const recipes = [
             "先下菜梗炒 30 秒，再下菜葉。",
             "加鹽調味，快炒至菜葉剛軟即可起鍋。"
         ],
+        source: {
+            title: "愛料理｜蒜炒青江菜 by Kalu Tsai（步驟為小組版本）",
+            url: "https://icook.tw/recipes/343604",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -167,6 +202,11 @@ const recipes = [
             "熱鍋爆香蒜末，放入玉米筍炒 1 分鐘。",
             "加入花椰菜與少許水，加鹽拌炒至熟即可。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜蒜炒花椰菜玉米筍（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E8%92%9C%E7%82%92%E8%8A%B1%E6%A4%B0%E8%8F%9C%E7%8E%89%E7%B1%B3%E7%AD%8D",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -183,6 +223,11 @@ const recipes = [
             "加入少許鹽、醬油與香油拌勻，即可食用（備料加拌製約 5 分鐘，即上方標示的料理時間）。",
             "【選擇性等待】想更入味，可再冷藏約 10 分鐘；這段是等待時間，不計入料理時間。"
         ],
+        source: {
+            title: "愛料理搜尋｜涼拌小黃瓜（步驟為小組版本）",
+            url: "https://icook.tw/search/%E6%B6%BC%E6%8B%8C%E5%B0%8F%E9%BB%83%E7%93%9C/",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -241,6 +286,11 @@ const recipes = [
             "加水至半淹過食材，加少許醬油與鹽，蓋鍋蓋燉煮。",
             "小火煮約 15–20 分鐘，至馬鈴薯鬆軟入味即可。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜燉馬鈴薯紅蘿蔔（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E7%87%89%E9%A6%AC%E9%88%B4%E8%96%AF%E7%B4%85%E8%98%BF%E8%94%94",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -278,6 +328,15 @@ const recipes = [
             "依喜好加入黑胡椒調味。",
             "冷藏後享用，口感更清爽。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜小黃瓜優格沙拉（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E5%B0%8F%E9%BB%83%E7%93%9C%E5%84%AA%E6%A0%BC%E6%B2%99%E6%8B%89",
+            type: "reference"
+        },
+        photoLink: {
+            title: "愛料理｜希臘式優格小黃瓜醬（Tzatziki）by KOKO好食光",
+            url: "https://icook.tw/recipes/309113"
+        },
         image: ""
     },
     {
@@ -322,6 +381,10 @@ const recipes = [
             url: "https://health.tvbs.com.tw/nutrition/355727",
             type: "synced"
         },
+        photoLink: {
+            title: "愛料理｜豆腐蒸蛋 by Katie",
+            url: "https://icook.tw/recipes/436733"
+        },
         image: ""
     },
     {
@@ -338,6 +401,11 @@ const recipes = [
             "熱鍋爆香蒜末，下雞胸肉炒至變白。",
             "加入花椰菜拌炒，調味後炒熟即可。"
         ],
+        source: {
+            title: "愛料理搜尋｜雞胸肉炒花椰菜（步驟為小組版本）",
+            url: "https://icook.tw/search/%E9%9B%9E%E8%83%B8%E8%82%89%E7%82%92%E8%8A%B1%E6%A4%B0%E8%8F%9C/",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -380,6 +448,10 @@ const recipes = [
             url: "https://health.tvbs.com.tw/nutrition/345152",
             type: "synced"
         },
+        photoLink: {
+            title: "愛料理｜家常料理-培根炒高麗菜 by 艾咪的實驗廚房",
+            url: "https://icook.tw/recipes/331387"
+        },
         image: ""
     },
     {
@@ -396,6 +468,11 @@ const recipes = [
             "放入牛肉片大火快炒至完全變色、不再有生肉的粉紅色；牛肉片薄，不必久炒，但須切開最厚的一片確認中心已熟。有食物溫度計時，中心溫度需達 63°C（145°F）以上。",
             "加黑胡椒與少許鹽調味即可。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜洋蔥炒牛肉（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E6%B4%8B%E8%94%A5%E7%82%92%E7%89%9B%E8%82%89",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -412,6 +489,11 @@ const recipes = [
             "熱鍋下油，蝦仁炒至變紅、肉質呈不透明的乳白色後盛起；有食物溫度計時，蝦仁中心溫度需達 63°C（145°F）以上。",
             "同鍋倒入蛋液，半熟時倒回蝦仁，繼續拌炒到蛋完全凝固、不再有流動的蛋液，調味即可。"
         ],
+        source: {
+            title: "愛料理搜尋｜蝦仁炒蛋（步驟為小組版本）",
+            url: "https://icook.tw/search/%E8%9D%A6%E4%BB%81%E7%82%92%E8%9B%8B/",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -449,6 +531,11 @@ const recipes = [
             "放入起司，攪拌至融化成醬。",
             "加入義大利麵拌勻，以鹽與黑胡椒調味。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜奶油義大利麵（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E5%A5%B6%E6%B2%B9%E7%BE%A9%E5%A4%A7%E5%88%A9%E9%BA%B5",
+            type: "reference"
+        },
         image: ""
     },
     {
@@ -465,6 +552,15 @@ const recipes = [
             "加醬油與少許糖，煮滾後轉小火燉 20–25 分鐘。",
             "至雞肉熟透、馬鈴薯鬆軟即可，記得確認雞肉熟透。"
         ],
+        source: {
+            title: "Flambo｜日式馬鈴薯燉雞腿（步驟為小組版本）",
+            url: "https://flambo.com.tw/blogs/recipes/%E9%A6%AC%E9%88%B4%E8%96%AF%E7%87%89%E5%B0%8F%E9%9B%9E%E8%85%BF-chicken-stew-with-potato",
+            type: "reference"
+        },
+        photoLink: {
+            title: "愛料理｜馬鈴薯紅蘿蔔燉雞肉 by Mia Li（開箱文頁面）",
+            url: "https://icook.tw/products/kimlanfoods/experiences/1406"
+        },
         image: ""
     },
     {
@@ -481,6 +577,11 @@ const recipes = [
             "放入電鍋或蒸鍋蒸約 10–12 分鐘，確認肉熟透。",
             "取出撒上蔥花即可。"
         ],
+        source: {
+            title: "Cookpad 搜尋｜肉末豆腐蒸（步驟為小組版本）",
+            url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E8%82%89%E6%9C%AB%E8%B1%86%E8%85%90%E8%92%B8",
+            type: "reference"
+        },
         image: ""
     },
     {
