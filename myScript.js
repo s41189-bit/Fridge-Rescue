@@ -1,5 +1,4 @@
-
-// Fridge Rescue A 版 V1.1：推薦、篩選、補貨、採買清單、料理抽籤
+// Fridge Rescue A 版 V1.1：推薦、篩選、補貨、採買清單、料理抽籤（含食材數量與小數點後一位限制）
 // 正式冰箱接入方式：FridgeRescue.setInventory(轉換後的庫存陣列)
 (function () {
     "use strict";
@@ -166,6 +165,34 @@
         };
     }
 
+    // 數量處理工具：確保最少 0.1 且最多小數點後一位
+    function normalizeQuantity(value, fallback = 1) {
+        if (value === undefined || value === null || value === "") return fallback;
+        const num = Number(value);
+        if (!Number.isFinite(num) || num < 0.1) return fallback;
+        return Math.round(num * 10) / 10;
+    }
+
+    function limitToOneDecimal(input) {
+        let val = input.value;
+        if (!val) return;
+
+        if (val.includes("-")) {
+            val = val.replace(/-/g, "");
+        }
+
+        if (val.includes(".")) {
+            const parts = val.split(".");
+            if (parts[1].length > 1) {
+                val = parts[0] + "." + parts[1].slice(0, 1);
+            }
+        }
+
+        if (input.value !== val) {
+            input.value = val;
+        }
+    }
+
     // 暫定整合格式；B 的不同欄位請先轉換成此格式
     function adaptFridgeItems(items) {
 
@@ -180,6 +207,7 @@
                 ingredient_id: master.ingredient_id,
                 ingredient_name: master.ingredient_name,
                 category: master.category,
+                quantity: normalizeQuantity(item.quantity, 1),
                 expiryDate: item.expiryDate || ""
             };
         });
@@ -350,19 +378,30 @@
             const s = expiryStatus(item.expiryDate);
 
             return `<div class="fridge-item">
-                <strong>${escapeHTML(item.ingredient_name)}</strong>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-1">
+                    <div>
+                        <strong>${escapeHTML(item.ingredient_name)}</strong>
+                        <span class="text-muted small ms-1">× ${escapeHTML(item.quantity)}</span>
+                    </div>
 
-                <span class="badge bg-${s.color} ${s.color === "warning" ? "text-dark" : ""}">
-                    ${escapeHTML(s.text)}
-                </span>
+                    <span class="badge bg-${s.color} ${s.color === "warning" ? "text-dark" : ""}">
+                        ${escapeHTML(s.text)}
+                    </span>
+                </div>
 
-                <div class="d-flex gap-2 mt-2">
+                <div class="d-flex gap-2 mt-2 align-items-center">
+
+                    <input type="number" class="form-control form-control-sm qty-input"
+                        style="max-width: 85px;"
+                        step="0.1" min="0.1"
+                        aria-label="${escapeHTML(item.ingredient_name)}數量"
+                        data-qty="${i}" value="${escapeHTML(item.quantity)}">
 
                     <input type="date" class="form-control form-control-sm"
                         aria-label="${escapeHTML(item.ingredient_name)}到期日"
                         data-date="${i}" value="${escapeHTML(item.expiryDate)}">
 
-                    <button type="button" class="btn btn-outline-danger btn-sm"
+                    <button type="button" class="btn btn-outline-danger btn-sm flex-shrink-0"
                         data-remove="${i}">刪除</button>
 
                 </div>
@@ -736,8 +775,72 @@
         }
     }
 
+    // 自動在表單與快捷彈窗補上「食材數量」輸入框（若 HTML 尚未自行加入）
+    function ensureQuantityInputs() {
+
+        const fridgeForm = $("mockFridgeForm");
+        if (fridgeForm && !$("ingredientQty")) {
+            const qtyBlock = `
+                <div class="mb-3">
+                    <label for="ingredientQty" class="form-label fw-bold">
+                        食材數量
+                    </label>
+                    <input type="number" id="ingredientQty" class="form-control qty-input"
+                        step="0.1" min="0.1" value="1" placeholder="例如：1 或 1.5" required>
+                    <small class="text-muted d-block mt-1">
+                        最少 0.1，最多輸入到小數點後一位。
+                    </small>
+                </div>`;
+
+            const expiryField = $("expiryDate");
+            const expiryGroup = expiryField ? expiryField.closest(".mb-3") : null;
+            if (expiryGroup) {
+                expiryGroup.insertAdjacentHTML("beforebegin", qtyBlock);
+            } else {
+                fridgeForm.insertAdjacentHTML("afterbegin", qtyBlock);
+            }
+        }
+
+        const quickForm = $("quickAddFridgeForm");
+        if (quickForm && !$("quickAddQty")) {
+            const quickQtyBlock = `
+                <div class="mb-2">
+                    <label for="quickAddQty" class="form-label small fw-bold mb-1">
+                        數量（最多小數點後一位）
+                    </label>
+                    <input type="number" id="quickAddQty" class="form-control form-control-sm qty-input"
+                        step="0.1" min="0.1" value="1" required>
+                </div>`;
+
+            const quickExpiry = $("quickAddExpiry");
+            const quickExpiryGroup = quickExpiry ? quickExpiry.closest(".mb-2") : null;
+            if (quickExpiryGroup) {
+                quickExpiryGroup.insertAdjacentHTML("beforebegin", quickQtyBlock);
+            }
+        }
+
+        const quickModal = $("quickAddFridgeModal");
+        if (quickModal) {
+            quickModal.addEventListener("show.bs.modal", function () {
+                if ($("quickAddQty")) {
+                    $("quickAddQty").value = "1";
+                }
+            });
+        }
+
+        if (quickForm) {
+            quickForm.addEventListener("submit", function () {
+                if ($("ingredientQty") && $("quickAddQty")) {
+                    $("ingredientQty").value = $("quickAddQty").value || "1";
+                }
+            }, true);
+        }
+    }
+
     // 8. 事件：將上述函式接上 index.html
     function init() {
+
+        ensureQuantityInputs();
 
         fridgeItems = adaptFridgeItems(fridgeItems);
 
@@ -757,6 +860,19 @@
             select.appendChild(option);
         }
 
+        // 統一限制所有 .qty-input 最多輸入到小數點後一位
+        document.addEventListener("keydown", function (event) {
+            if (!event.target.classList || !event.target.classList.contains("qty-input")) return;
+            if (["e", "E", "+", "-"].includes(event.key)) {
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener("input", function (event) {
+            if (!event.target.classList || !event.target.classList.contains("qty-input")) return;
+            limitToOneDecimal(event.target);
+        });
+
         // 新增冰箱食材
         $("mockFridgeForm").addEventListener("submit", function (event) {
 
@@ -764,12 +880,22 @@
 
             if (!mockMode || !ingredientById(select.value)) return;
 
+            const qtyInput = $("ingredientQty");
+            const quantity = qtyInput ? normalizeQuantity(qtyInput.value, NaN) : 1;
+
+            if (!Number.isFinite(quantity) || quantity < 0.1) {
+                message("請輸入有效的食材數量（最少 0.1，最多小數點後一位）。", "warning");
+                if (qtyInput) qtyInput.focus();
+                return;
+            }
+
             const id = "mock_" + Date.now() + "_" +
                 Math.random().toString(36).slice(2);
 
             updateMockInventory(fridgeItems.concat([{
                 id,
                 ingredient_id: select.value,
+                quantity,
                 expiryDate: $("expiryDate").value
             }]));
 
@@ -786,15 +912,31 @@
             updateMockInventory(fridgeItems);
         });
 
-        // 修改食材到期日
+        // 修改食材到期日或數量
         $("mockFridgeList").addEventListener("change", function (event) {
 
-            if (!mockMode || event.target.dataset.date === undefined) return;
+            if (!mockMode) return;
 
-            fridgeItems[Number(event.target.dataset.date)].expiryDate =
-                event.target.value;
+            if (event.target.dataset.date !== undefined) {
+                fridgeItems[Number(event.target.dataset.date)].expiryDate =
+                    event.target.value;
 
-            updateMockInventory(fridgeItems);
+                updateMockInventory(fridgeItems);
+                return;
+            }
+
+            if (event.target.dataset.qty !== undefined) {
+                const index = Number(event.target.dataset.qty);
+                const nextQty = normalizeQuantity(event.target.value, NaN);
+
+                if (!Number.isFinite(nextQty) || nextQty < 0.1) {
+                    event.target.value = fridgeItems[index].quantity;
+                    return;
+                }
+
+                fridgeItems[index].quantity = nextQty;
+                updateMockInventory(fridgeItems);
+            }
         });
 
         // 載入示範資料前，保護原有個人庫存
@@ -811,16 +953,19 @@
                 {
                     id: "demo1",
                     ingredient_id: "ING_001",
+                    quantity: 2,
                     expiryDate: localDate(new Date())
                 },
                 {
                     id: "demo2",
                     ingredient_id: "ING_021",
+                    quantity: 1.5,
                     expiryDate: ""
                 },
                 {
                     id: "demo3",
                     ingredient_id: "ING_030",
+                    quantity: 1,
                     expiryDate: ""
                 }
             ]);

@@ -119,6 +119,15 @@
                                             </select>
                                         </div>
 
+
+                                        <div class="mb-3">
+    <label for="ingredientQty" class="form-label fw-bold">
+        食材數量
+    </label>
+    <input type="number" id="ingredientQty" class="form-control qty-input"
+        step="0.1" min="0.1" value="1" placeholder="例如：1 或 1.5" required>
+    
+</div>
                                         <div class="mb-3">
                                             <label for="expiryDate" class="form-label fw-bold">
                                                 到期日期
@@ -401,6 +410,13 @@
                         </p>
 
                         <div class="mb-2">
+    <label for="quickAddQty" class="form-label small fw-bold mb-1">
+        數量（最多小數點後一位）
+    </label>
+    <input type="number" id="quickAddQty" class="form-control form-control-sm qty-input"
+        step="0.1" min="0.1" value="1" required>
+</div>
+                        <div class="mb-2">
                             <label for="quickAddExpiry" class="form-label small fw-bold mb-1">
                                 到期日期（已預填建議保存天數，可修改或留空）
                             </label>
@@ -523,11 +539,13 @@
                         });
                         if (!master) return;
 
-                        document.getElementById("quickAddIngredientId").value = master.ingredient_id;
-                        document.getElementById("quickAddIngredientName").textContent = master.ingredient_name;
-                        document.getElementById("quickAddExpiry").value = addDaysStr(master.suggested_days);
-                        document.getElementById("quickAddSuggestText").textContent =
-                            "🌱 建議冷藏保存約 " + master.suggested_days + " 天";
+                       // 打開快捷視窗時，預填數量為 1
+document.getElementById("quickAddIngredientId").value = master.ingredient_id;
+document.getElementById("quickAddIngredientName").textContent = master.ingredient_name;
+document.getElementById("quickAddQty").value = "1";
+document.getElementById("quickAddExpiry").value = addDaysStr(master.suggested_days);
+document.getElementById("quickAddSuggestText").textContent =
+    "🌱 建議冷藏保存約 " + master.suggested_days + " 天";
 
                         if (window.bootstrap && bootstrap.Modal) {
                             bootstrap.Modal.getOrCreateInstance(
@@ -540,25 +558,29 @@
         }
 
         if (quickForm) {
-            quickForm.addEventListener("submit", function (e) {
-                e.preventDefault();
-                const ingSelect = document.getElementById("ingredientSelect");
-                const expInput = document.getElementById("expiryDate");
-                const fridgeForm = document.getElementById("mockFridgeForm");
+    quickForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const ingSelect = document.getElementById("ingredientSelect");
+        const qtyInput = document.getElementById("ingredientQty");
+        const expInput = document.getElementById("expiryDate");
+        const fridgeForm = document.getElementById("mockFridgeForm");
 
-                if (ingSelect && expInput && fridgeForm) {
-                    ingSelect.value = document.getElementById("quickAddIngredientId").value;
-                    expInput.value = document.getElementById("quickAddExpiry").value;
-                    fridgeForm.requestSubmit();
-                }
-
-                if (window.bootstrap && bootstrap.Modal) {
-                    bootstrap.Modal.getOrCreateInstance(
-                        document.getElementById("quickAddFridgeModal")
-                    ).hide();
-                }
-            });
+        if (ingSelect && expInput && fridgeForm) {
+            ingSelect.value = document.getElementById("quickAddIngredientId").value;
+            if (qtyInput) {
+                qtyInput.value = document.getElementById("quickAddQty").value || "1";
+            }
+            expInput.value = document.getElementById("quickAddExpiry").value;
+            fridgeForm.requestSubmit();
         }
+
+        if (window.bootstrap && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(
+                document.getElementById("quickAddFridgeModal")
+            ).hide();
+        }
+    });
+}
     }());
     </script>
 
