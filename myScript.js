@@ -381,7 +381,9 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-1">
                     <div>
                         <strong>${escapeHTML(item.ingredient_name)}</strong>
-                        <span class="text-muted small ms-1">× ${escapeHTML(item.quantity)}</span>
+                        <span class="text-muted small ms-1">
+                             ${escapeHTML(item.quantity)} ${escapeHTML(ingredientById(item.ingredient_id)?.unit || "")}
+                        </span>
                     </div>
 
                     <span class="badge bg-${s.color} ${s.color === "warning" ? "text-dark" : ""}">
@@ -725,22 +727,51 @@
         return saved;
     }
 
-    function addToShopping(id) {
+    
+function addToShopping(id) {
 
-        const r = results.find(function (item) {
-            return item.recipe.recipeId === id;
-        });
+    const r = results.find(function (item) {
+        return item.recipe.recipeId === id;
+    });
 
-        if (!r || !r.valid || r.canCook) return;
+    if (!r || !r.valid || r.canCook) return;
 
-        const before = shoppingList.length;
+    const before = shoppingList.length;
 
-        shoppingList = mergeShopping(shoppingList, r.missingIngredients);
+    shoppingList = mergeShopping(shoppingList, r.missingIngredients);
 
-        if (updateShopping()) {
-            message(`已新增 ${shoppingList.length - before} 項食材至採買清單（自動排除重複項目）。`);
+    if (!updateShopping()) return;
+
+    const addedCount = shoppingList.length - before;
+
+    const text = addedCount > 0
+        ? `已成功加入 ${addedCount} 項食材至採買清單。`
+        : "這道料理缺少的食材已經在採買清單中，沒有重複新增。";
+
+    message(text);
+
+    const successText = $("shoppingSuccessText");
+    const successModal = $("shoppingSuccessModal");
+
+    if (successText) {
+        successText.textContent = text;
+    }
+
+    if (successModal && window.bootstrap && bootstrap.Modal) {
+        // 從食譜詳情加入時，先關閉原本的視窗
+        const recipeModal = $("recipeModal");
+
+        if (recipeModal && recipeModal.classList.contains("show")) {
+            recipeModal.addEventListener("hidden.bs.modal", function () {
+                bootstrap.Modal.getOrCreateInstance(successModal).show();
+            }, { once: true });
+
+            bootstrap.Modal.getOrCreateInstance(recipeModal).hide();
+        } else {
+            bootstrap.Modal.getOrCreateInstance(successModal).show();
         }
     }
+}
 
     function copyShopping() {
 

@@ -442,7 +442,44 @@
         </div>
 
     </div>
+    <!-- Bootstrap Modal 3：加入採買清單成功提示 -->
+<div class="modal fade" id="shoppingSuccessModal" tabindex="-1"
+    aria-labelledby="shoppingSuccessTitle" aria-hidden="true">
 
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title h5" id="shoppingSuccessTitle">
+                    ✅ 採買清單已更新
+                </h2>
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+
+            <div class="modal-body">
+                <p id="shoppingSuccessText" class="mb-0">
+                    食材已加入採買清單。
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+                    繼續看食譜
+                </button>
+
+                <button type="button" class="btn btn-success"
+                    id="goShoppingBtn"
+                    data-bs-dismiss="modal"
+                    data-tab-target="shoppingSection">
+                    查看採買清單
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
     <!-- 網站頁尾 -->
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-1 small">Fridge Rescue｜網站企劃課程專案</p>
