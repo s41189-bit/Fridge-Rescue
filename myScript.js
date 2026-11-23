@@ -629,11 +629,7 @@
             </ol>
 
             ${sourceHTML(recipe.source)}
-            ${photoLinkHTML(recipe.photoLink)}
-
-            <small class="text-muted d-block">
-                食譜為小組整理，部分步驟參考公開來源；份量、常備調味料及食材安全請自行確認。
-            </small>`;
+            ${photoLinkHTML(recipe.photoLink)}`;
 
         $("modalAddShoppingBtn").disabled = !r.valid || r.canCook;
 
