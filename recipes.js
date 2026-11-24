@@ -133,7 +133,7 @@ const recipes = [
             "對切後趁熱享用。"
         ],
         source: {
-            title: "愛料理搜尋｜起司吐司（步驟為小組版本）",
+            title: "愛料理搜尋｜起司吐司",
             url: "https://icook.tw/search/%E8%B5%B7%E5%8F%B8%E5%9C%9F%E5%8F%B8/",
             type: "reference"
         },
@@ -158,7 +158,7 @@ const recipes = [
             "切塊盛盤，可依喜好淋上蜂蜜或糖粉。"
         ],
         source: {
-            title: "Cookpad 搜尋｜法式吐司（步驟為小組版本）",
+            title: "Cookpad 搜尋｜法式吐司",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E6%B3%95%E5%BC%8F%E5%90%90%E5%8F%B8",
             type: "reference"
         },
@@ -233,7 +233,7 @@ const recipes = [
             "加入花椰菜與少許水，加鹽拌炒至熟即可。"
         ],
         source: {
-            title: "Cookpad 搜尋｜蒜炒花椰菜玉米筍（步驟為小組版本）",
+            title: "Cookpad 搜尋｜蒜炒花椰菜玉米筍",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E8%92%9C%E7%82%92%E8%8A%B1%E6%A4%B0%E8%8F%9C%E7%8E%89%E7%B1%B3%E7%AD%8D",
             type: "reference"
         },
@@ -258,7 +258,7 @@ const recipes = [
             "【選擇性等待】想更入味，可再冷藏約 10 分鐘；這段是等待時間，不計入料理時間。"
         ],
         source: {
-            title: "愛料理搜尋｜涼拌小黃瓜（步驟為小組版本）",
+            title: "愛料理搜尋｜涼拌小黃瓜",
             url: "https://icook.tw/search/%E6%B6%BC%E6%8B%8C%E5%B0%8F%E9%BB%83%E7%93%9C/",
             type: "reference"
         },
@@ -308,7 +308,7 @@ const recipes = [
             "翻面再煎至兩面金黃酥脆即可。"
         ],
         source: {
-            title: "Daydaycook｜Scallion Potato Egg Pancake（來源另加麵粉，步驟為小組版本）",
+            title: "Daydaycook｜Scallion Potato Egg Pancake（來源另加麵粉）",
             url: "https://www.daydaycook.com/en/recipe/scallion-potato-egg-pancake",
             type: "reference"
         },
@@ -333,7 +333,7 @@ const recipes = [
             "小火煮約 15–20 分鐘，至馬鈴薯鬆軟入味即可。"
         ],
         source: {
-            title: "Cookpad 搜尋｜燉馬鈴薯紅蘿蔔（步驟為小組版本）",
+            title: "Cookpad 搜尋｜燉馬鈴薯紅蘿蔔",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E7%87%89%E9%A6%AC%E9%88%B4%E8%96%AF%E7%B4%85%E8%98%BF%E8%94%94",
             type: "reference"
         },
@@ -383,7 +383,7 @@ const recipes = [
             "冷藏後享用，口感更清爽。"
         ],
         source: {
-            title: "Cookpad 搜尋｜小黃瓜優格沙拉（步驟為小組版本）",
+            title: "Cookpad 搜尋｜小黃瓜優格沙拉",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E5%B0%8F%E9%BB%83%E7%93%9C%E5%84%AA%E6%A0%BC%E6%B2%99%E6%8B%89",
             type: "reference"
         },
@@ -460,7 +460,7 @@ const recipes = [
             "加入花椰菜拌炒，調味後炒熟即可。"
         ],
         source: {
-            title: "愛料理搜尋｜雞胸肉炒花椰菜（步驟為小組版本）",
+            title: "愛料理搜尋｜雞胸肉炒花椰菜",
             url: "https://icook.tw/search/%E9%9B%9E%E8%83%B8%E8%82%89%E7%82%92%E8%8A%B1%E6%A4%B0%E8%8F%9C/",
             type: "reference"
         },
@@ -485,7 +485,7 @@ const recipes = [
             "加入蔥段，加醬油與少許糖拌炒均勻即可。"
         ],
         source: {
-            title: "YouTube｜蔥爆豬肉 家常快炒（步驟為小組版本）",
+            title: "YouTube｜蔥爆豬肉 家常快炒",
             url: "https://www.youtube.com/watch?v=dcl4r6Z8erI",
             type: "reference"
         },
@@ -535,7 +535,7 @@ const recipes = [
             "加黑胡椒與少許鹽調味即可。"
         ],
         source: {
-            title: "Cookpad 搜尋｜洋蔥炒牛肉（步驟為小組版本）",
+            title: "Cookpad 搜尋｜洋蔥炒牛肉",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E6%B4%8B%E8%94%A5%E7%82%92%E7%89%9B%E8%82%89",
             type: "reference"
         },
@@ -560,7 +560,7 @@ const recipes = [
             "同鍋倒入蛋液，半熟時倒回蝦仁，繼續拌炒到蛋完全凝固、不再有流動的蛋液，調味即可。"
         ],
         source: {
-            title: "愛料理搜尋｜蝦仁炒蛋（步驟為小組版本）",
+            title: "愛料理搜尋｜蝦仁炒蛋",
             url: "https://icook.tw/search/%E8%9D%A6%E4%BB%81%E7%82%92%E8%9B%8B/",
             type: "reference"
         },
@@ -610,7 +610,7 @@ const recipes = [
             "加入義大利麵拌勻，以鹽與黑胡椒調味。"
         ],
         source: {
-            title: "Cookpad 搜尋｜奶油義大利麵（步驟為小組版本）",
+            title: "Cookpad 搜尋｜奶油義大利麵",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E5%A5%B6%E6%B2%B9%E7%BE%A9%E5%A4%A7%E5%88%A9%E9%BA%B5",
             type: "reference"
         },
@@ -661,7 +661,7 @@ const recipes = [
             "取出撒上蔥花即可。"
         ],
         source: {
-            title: "Cookpad 搜尋｜肉末豆腐蒸（步驟為小組版本）",
+            title: "Cookpad 搜尋｜肉末豆腐蒸",
             url: "https://cookpad.com/tw/%E6%90%9C%E5%B0%8B/%E8%82%89%E6%9C%AB%E8%B1%86%E8%85%90%E8%92%B8",
             type: "reference"
         },
